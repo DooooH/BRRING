@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "608194446352",
+    "project_id": "mobileappprogramming-3c71d",
+    "storage_bucket": "mobileappprogramming-3c71d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608194446352:android:f2da15675a63a0e3107695",
+        "android_client_info": {
+          "package_name": "com.cookandroid.lowest_price_alert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608194446352-eo9a3kj6gdise2m3b3kmp6d4e9l5o05m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cookandroid.lowest_price_alert",
+            "certificate_hash": "530963c46d9bf4e7439e8b9fb09e9d7af99eba92"
+          }
+        },
+        {
+          "client_id": "608194446352-amlkqa4seosv7ckoe4uajk393sg42t9m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6fVZiXJbrh45bKVJDfHcDxMJU4LhVbp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608194446352-amlkqa4seosv7ckoe4uajk393sg42t9m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
