@@ -15,18 +15,13 @@ if response.status_code == 200:
     soup = BeautifulSoup(html, 'html.parser')
     # list = driver.find_element_by_class_name('product_list').text
 
-    # 검색 전체 리스트
-    result = soup.find('div', class_='main_prodlist main_prodlist_list')
-    # print(result)
-
     product_list = soup.find('ul', class_='product_list')
 
     # 각 상품 정보
     prod_info_list = product_list.find_all('div', class_='prod_main_info')
-    # for item in prod_info_list:
-    #     print(item.get_text())
 
-    for item in prod_info_list:
+    for i in range(0, len(prod_info_list) - 1):
+        item = prod_info_list[i]
         # 인기순위, 상품이름 포함
         prod_name = item.find('p', class_='prod_name')
         # 상품명
