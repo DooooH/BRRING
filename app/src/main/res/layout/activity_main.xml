@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="인터넷 최저가 어쩌구앱!"
+        android:text="인터넷 최저가 알람 인최알차트!"
         android:textAlignment="center"
         android:textColor="#208DC4" />
     <EditText
