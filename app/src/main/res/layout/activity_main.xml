@@ -22,4 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="로그인" />
+    <Button
+        android:id="@+id/googleLoginBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="구글 로그인" />
 </LinearLayout>

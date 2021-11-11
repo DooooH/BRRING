@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var emailEditText : EditText
     lateinit var passwordEditText: EditText
     lateinit var loginBtn : Button
+    lateinit var googleLoginBtn : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         loginBtn = findViewById(R.id.loginBtn)
+        googleLoginBtn = findViewById(R.id.googleLoginBtn)
 
         loginBtn.setOnClickListener{
             auth?.signInWithEmailAndPassword(emailEditText.text.toString(),passwordEditText.text.toString())
