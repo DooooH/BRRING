@@ -22,9 +22,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="로그인" />
-    <Button
-        android:id="@+id/googleLoginBtn"
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_sign_in_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="구글 로그인" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="142dp"
+        tools:layout_editor_absoluteY="338dp" />
 </LinearLayout>
