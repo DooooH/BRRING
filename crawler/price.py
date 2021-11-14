@@ -1,18 +1,33 @@
 import requests
 from bs4 import BeautifulSoup
-import pyrebase
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
+
+# Firebase database 인증 및 앱 초기화
+cred = credentials.Certificate('key.json')
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://mobileappprogramming-3c71d-default-rtdb.firebaseio.com/'
+})
+
+dir = db.reference() #기본 위치 지정
+dir.update({'자동차':'기아'})
 
 headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}
 url = 'http://prod.danawa.com/info/?pcode=15253217&cate=12210596'
 # pcode : 상품코드, cate : category
 
-#Firebase database 인증 및 앱 초기화
-firebase_admin.initialize_app({
-    'databaseURL' : 'https://mobileappprogramming-3c71d-default-rtdb.firebaseio.com/'
-})
 
-ref = db.reference() #db 위치 지정
-ref.update({'반원' : '고슴도치'}) #해당 변수가 없으면 생성한다.
+# config = {
+#     "apiKey": "AIzaSyD6fVZiXJbrh45bKVJDfHcDxMJU4LhVbp8",
+#     "authDomain": "pythontest.firebaseapp.com",
+#     "databaseURL": "https://mobileappprogramming-3c71d-default-rtdb.firebaseio.com",
+#     "projectId": "mobileappprogramming-3c71d",
+#     "storageBucket": "mobileappprogramming-3c71d.appspot.com",
+#     "messagingSenderId": "6",
+#     "appId": ""
+# }
+
 
 response = requests.get(url, headers=headers)
 
