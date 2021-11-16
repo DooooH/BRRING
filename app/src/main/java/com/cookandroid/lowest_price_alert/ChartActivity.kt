@@ -85,7 +85,7 @@ class ChartActivity : AppCompatActivity() {
                     val now_path = path + date
                     //var image = "http://img.danawa.com/prod_img/500000/217/253/img/15253217_1.jpg?shrink=330:330&_v=20211026140920"
                     start_date++
-                    Glide.with(this).load(R.drawable.ipad).into(imageview) // 지금은 그냥 하드코딩. 이미지 url로 불러오는거 시도해봐야 함
+                    Glide.with(this).load(R.drawable.ipad).into(imageview) // 지금은 drawable에서 . 이미지 url로 불러오는거 시도해봐야 함
 
 
                     val myRef : DatabaseReference = firebaseDatabase.getReference(now_path) // 실시간 db에 접근
