@@ -10,3 +10,4 @@
 .cxx
 local.properties
 /venv
+/crawler/crawler/*
