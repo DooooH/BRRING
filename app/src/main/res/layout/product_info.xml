@@ -1,40 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ScrollView1"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/productName"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
-            android:textSize="32sp"
-            android:text="골라골라 가지가지 생수" />
+        android:orientation="vertical"
+        tools:context=".MainActivity">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="274dp"
-            android:src="@drawable/water">
-        </ImageView>
+            android:id="@+id/imageview"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"/>
 
         <TextView
-            android:id="@+id/productPrice"
+            android:id="@+id/nametext"
             android:layout_width="wrap_content"
-            android:layout_height="42dp"
-            android:text="1,500원"
-            android:textSize="32sp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+
+            />
+        <TextView
+            android:id="@+id/most_expensive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/most_cheap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <TextView
+            android:id="@+id/average"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <TextView
+            android:id="@+id/url_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
 
         <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/linechart"
+            android:id = "@+id/lineChart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height = "350dp"
+            tools:ignore="MissingClass"
+            android:layout_marginTop="50dp"/>
 
-    </LinearLayout>
-
-
-</LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>
