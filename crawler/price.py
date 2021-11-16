@@ -1,3 +1,4 @@
+import os
 import requests
 import pytz
 import re
@@ -50,7 +51,8 @@ def crawl_update(url, headers, cur_time):
         print(spec.get_text().strip())
 
 # Firebase database 인증 및 앱 초기화
-cred = credentials.Certificate('key.json')
+current_dir = os.path.dirname(os.path.realpath(__file__))
+cred = credentials.Certificate(current_dir + '/key.json')
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://mobileappprogramming-3c71d-default-rtdb.firebaseio.com/'
 })
