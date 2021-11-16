@@ -20,6 +20,6 @@
 
 4. 크롤러 실행
 
-   `nohup python3 price.py &`
+   `nohup crawler/bin/python price.py &`
 
    > `ps -ef | grep price.py` 로 확인 가능 
