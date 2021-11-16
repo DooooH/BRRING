@@ -11,3 +11,4 @@
 local.properties
 /venv
 /crawler/crawler/*
+/crawler/*.out
