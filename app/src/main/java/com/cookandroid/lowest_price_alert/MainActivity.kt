@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 
@@ -72,10 +73,13 @@ class MainActivity : AppCompatActivity() {
                 if(task.isSuccessful){
                     //로그인 처리를 해주면 됨!
                     Toast.makeText(this, "login", Toast.LENGTH_LONG).show()
+                    val user = auth?.currentUser
+                    updateUI(user)
                 }
                 else{
                     // 오류가 난 경우!
                     Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
+                    updateUI(null)
                 }
             }
         //email, password null인 경우 예외 처리 해주기
@@ -111,17 +115,19 @@ class MainActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
+                    Toast.makeText(this, "signInWithCredential:success", Toast.LENGTH_SHORT).show()
                     val user = auth?.currentUser
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Toast.makeText(this, "signInWithCredential:failure", Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
             }
     }
     private fun updateUI(user: FirebaseUser?) {
-        Toast.makeText(this, user.toString(), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, user?.uid.toString(), Toast.LENGTH_SHORT).show()
         //startActivity(...)
     }
 
