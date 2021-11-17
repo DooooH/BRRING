@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
     // variables for login
@@ -29,6 +30,9 @@ class LoginActivity : AppCompatActivity() {
 
     // declare nullable object for google login
     private var googleSignInClient : GoogleSignInClient? = null
+
+    // firestore
+    val firestoredb = FirebaseFirestore.getInstance() // firestore db
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,6 +133,32 @@ class LoginActivity : AppCompatActivity() {
     }
     private fun updateUI(user: FirebaseUser?) {
         Toast.makeText(this, user?.uid.toString(), Toast.LENGTH_SHORT).show()
+
+        // if there are user info
+        // store user to firestore
+        // Create a reference to the cities collection
+        val userRef = firestoredb.collection("user").document(user?.uid.toString())
+            .get()
+            .addOnSuccessListener { document ->
+                if(document == null || document.data == null){ // user not exist -> sign up
+                    val currentUser = hashMapOf(
+                        "email" to user?.email.toString()
+                    )
+                    firestoredb.collection("user").document(user?.uid.toString())
+                        .set(currentUser)
+                        .addOnSuccessListener { Toast.makeText(this, "DocumentSnapshot successfully written!", Toast.LENGTH_SHORT).show() }
+                        .addOnFailureListener { e -> Toast.makeText(this, "Error writing document", Toast.LENGTH_SHORT).show() }
+                }
+                else{
+                    Toast.makeText(this, "DocumentSnapshot data: ${document.data}", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
