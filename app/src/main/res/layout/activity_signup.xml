@@ -4,30 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".SignUpActivity"
     android:orientation="vertical">
-
-    <EditText
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="원하는 상품을 검색해보세요" />
-
-    <Button
-        android:id="@+id/product_infoBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="물품목록테스트"/>
-
-    <Button
-        android:id="@+id/loginBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="로그인" />
-
+        android:layout_height="200dp"
+        android:src="@drawable/temporary_logo" />
     <TextView
-        android:id="@+id/signupText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="계정이 없으신가요? 가입하기>" />
+        android:text="인터넷 최저가 알람 인최알차트!"
+        android:textAlignment="center"
+        android:textColor="#208DC4" />
+    <Button
+        android:id="@+id/signupBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="이메일 회원가입" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="142dp"
+        tools:layout_editor_absoluteY="338dp" />
 
 </LinearLayout>
