@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
 
         productBtn = findViewById(R.id.product_infoBtn)
         loginBtn = findViewById(R.id.loginBtn)
-        logoutBtn = findViewById(R.id.logoutBtn)
         signupText = findViewById(R.id.signupText)
 
         productBtn.setOnClickListener{
