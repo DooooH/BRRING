@@ -7,7 +7,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:hint="글 제목" />
     <EditText
         android:layout_width="match_parent"
@@ -17,12 +17,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:text="공구 할 상품 선택" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:text="글 작성" />
 
 </LinearLayout>
