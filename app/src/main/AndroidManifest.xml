@@ -38,6 +38,10 @@
             android:name=".board.PostActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".board.WritePostActivity"
+            android:exported="true">
+        </activity>
 
     </application>
 

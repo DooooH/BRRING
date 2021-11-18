@@ -1,8 +1,10 @@
 package com.cookandroid.lowest_price_alert.board
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import com.cookandroid.lowest_price_alert.LoginActivity
 import com.cookandroid.lowest_price_alert.R
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -13,20 +15,26 @@ class PostActivity : AppCompatActivity() {
     val firestoredb = FirebaseFirestore.getInstance() // firestore db
     lateinit var boardId : String
 
+    // posts
     var postList = arrayListOf<Post>()
     lateinit var postListAdapter : BaseAdapter
+
+    // view components
+    lateinit var writeBtn : Button
 
     //onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_post_activity)
 
+        // connect view components to variables
+        writeBtn = findViewById(R.id.writeBtn)
+
         // connect list view
         var postListView = findViewById<ListView>(R.id.postListView)
         var thisIntent = intent
         boardId = intent.getStringExtra("boardId").toString()
         Toast.makeText(this, boardId, Toast.LENGTH_SHORT).show()
-
 
         // get posts from firestore
         firestoredb.collection("location_board").document(boardId).collection("post")
@@ -59,6 +67,12 @@ class PostActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
             }
+
+        // add on click listener to button
+        writeBtn.setOnClickListener {
+            val intent = Intent(this, WritePostActivity::class.java)
+            startActivity(intent)
+        }
 
         // connect location board list and list view via adapter
         postListAdapter = PostListAdapter(this, postList)

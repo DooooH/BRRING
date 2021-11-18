@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <Button
+        android:id="@+id/writeBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="글 작성" />
