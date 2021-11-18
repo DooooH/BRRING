@@ -10,6 +10,8 @@
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.13994565217391305" />
         <entry key="app/src/main/res/layout/board_activity.xml" value="0.1" />
         <entry key="app/src/main/res/layout/board_lv_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/board_lv_post_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/board_post_activity.xml" value="0.10869565217391304" />
       </map>
     </option>
   </component>
