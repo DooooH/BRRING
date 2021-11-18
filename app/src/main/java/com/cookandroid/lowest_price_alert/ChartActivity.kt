@@ -1,10 +1,15 @@
 package com.cookandroid.lowest_price_alert
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.YAxis
@@ -20,6 +25,10 @@ class ChartActivity : AppCompatActivity() {
     val chartData = ArrayList<ChartData>() // Line Chart에 그리기 위한 데이터를 담을 ArrayList
     val product_list = ArrayList<ProductData>() // firestore에 존재하는 모든 제품 정보를 담을 ArrayList
 
+    val channel_name: String = "CHANNEL_1"
+    val CHANNEL_ID: String = "MY_CH"
+    val notificationId: Int = 1002
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.product_info)
@@ -27,19 +36,15 @@ class ChartActivity : AppCompatActivity() {
 
         val firebaseDatabase = FirebaseDatabase.getInstance() // 실시간 데이터 db
         val firestoredb = FirebaseFirestore.getInstance() // firestore db
-
-
+        
         var imageview = findViewById<ImageView>(R.id.imageview) // 제품 사진 ImageView
         var product_name_textView = findViewById<TextView>(R.id.nametext) // 제품명 TextView
         var most_cheap_textview = findViewById<TextView>(R.id.most_cheap) // 최저가 TextView
         var avg_textview = findViewById<TextView>(R.id.average) // 평균가 TextView
         var most_expensive_textview = findViewById<TextView>(R.id.most_expensive) // 최고가 TextView
         //var product_url_textview = findViewById<TextView>(R.id.url_text) // 이미지 불러오기 test 용
-
         var days_for_month = arrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31) // 매달 날짜 수
-
-
-
+        
         firestoredb.collection("product_list") //firestore db로부터 등록된 모든 제품 읽어오기
             .get()
             .addOnSuccessListener { result ->
@@ -69,29 +74,27 @@ class ChartActivity : AppCompatActivity() {
                 var start_year = start_date_info[0].toInt()
                 var start_month = start_date_info[1].toInt()
                 var start_date = start_date_info[2].toInt() // 현재 코드는 같은 달 내에서만 작동
-                var last_date_info =
-                    product_list.get(product_index_now).LastDate.split("-") // 마지막 날짜 정보 가공 (나중에 업그레이드 해야함)
-                var last_month = last_date_info[1].toInt()
-                var last_date = last_date_info[2].toInt()
-
-
-                var price_info = "0" //  실시간 db로 부터 가져오는 가격 정보
+                
                 var max_cost = 0 // 최고가 검색을 위한 변수
                 var min_cost = 1000000000 // 최저가 검색을 위한 변수
                 var avg_cost = 0 // 평균가 검색을 위한 변수
                 var total_cost = 0 // 평균가 검색을 위해 모든 가격에 대한 합산을 위한 변수
-
-
+                
                 var change_flag = 0
                 val path = "product_list/15253217" // 실시간 db에 접근하기 위한 경로. 현재는 하드코딩.
                 val myRef: DatabaseReference = firebaseDatabase.getReference(path) // 실시간 db에 접근
+                
+                var builder = NotificationCompat.Builder(this, CHANNEL_ID) // 푸쉬 알람 기능
+                    .setSmallIcon(R.drawable.bell)
+                    .setContentTitle("notification") // 푸쉬 알람에 띄울 큰 문장
+                    .setContentText("lowest price !!") // 푸쉬 알람에 띄울 작은 문장
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                
                 product_name_textView.text =
                     "제품명 : " + product_list.get(product_index_now).name // 제품명 textView에 띄우기
 
                 Glide.with(this).load(R.drawable.ipad)
                     .into(imageview) // 지금은 drawable에서 . 이미지 url로 불러오는거 시도해봐야 함
-
-                var str = ""
 
                 myRef.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -101,7 +104,7 @@ class ChartActivity : AppCompatActivity() {
                         var now_year = start_year
                         var count_record = 0 // 평균가 검색을 위해 검색한 가격의 수에 대한 변수
 
-                        chartData.clear()
+                        chartData.clear() 
 
                         for (item in snapshot_info.children) {
                             count_record++;
@@ -112,17 +115,13 @@ class ChartActivity : AppCompatActivity() {
                             else
                                 today_date =
                                     now_year.toString() + "-" + now_month.toString() + "-0" + now_date.toString()
-
-
-                            var price_info =
-                                item.value.toString()
+                            
+                            var price_info = item.value.toString()  //  실시간 db로 부터 가져오는 가격 정보
 
                             max_cost = Math.max(max_cost, price_info.toInt()) // 최고가 갱신
                             if (min_cost > price_info.toInt()) {
-                                if (change_flag == 1) {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-                                    }
+                                if (change_flag == 1) { // 기존에 들어있던 가격이면 알림 없음
+                                    createNotificationChannel(builder, notificationId) // 새로 들어온 정보가 최저가이면 알림
                                 }
                                 min_cost =
                                     Math.min(min_cost, price_info.toInt()) // 최저가 갱신
@@ -136,8 +135,7 @@ class ChartActivity : AppCompatActivity() {
                                 "최고가 : " + max_cost.toString() + "원"// textview에 최고가 띄우기
                             avg_textview.text =
                                 "평균가 : " + avg_cost.toString() + "원"// textview에 평균가 띄우기
-
-
+                            
                             addChartItem(
                                 today_date,
                                 price_info.toDouble()
@@ -154,12 +152,9 @@ class ChartActivity : AppCompatActivity() {
                             } else {
                                 now_date++
                             }
-
                         }
                         LineChartGraph(chartData, "price") // 그래프 그리기
                         change_flag = 1
-
-
                     }
 
                     override fun onCancelled(error: DatabaseError) { // 실시간 db 접근을 실패하면
@@ -217,5 +212,30 @@ class ChartActivity : AppCompatActivity() {
         lineChart.data = data
         lineChart.animateXY(1000, 1000);
         lineChart.invalidate()
+    }
+
+    private fun createNotificationChannel( // 푸쉬 알림 생성
+        builder: NotificationCompat.Builder,
+        notificationId: Int
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val descriptionText = "notification for lowest price"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, channel_name, importance).apply {
+                description = descriptionText
+            }
+
+            channel.lightColor = Color.BLUE
+            //channel.enableVibration(true)
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+
+            notificationManager.notify(notificationId, builder.build())
+        } else {
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.notify(notificationId, builder.build())
+        }
     }
 }
