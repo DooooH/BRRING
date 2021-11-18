@@ -19,6 +19,12 @@
         android:text="물품목록테스트"/>
 
     <Button
+        android:id="@+id/boardBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="게시판"/>
+
+    <Button
         android:id="@+id/loginBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
