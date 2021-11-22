@@ -5,21 +5,25 @@
     android:orientation="vertical">
 
     <EditText
+        android:id="@+id/titleEt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:hint="글 제목" />
     <EditText
+        android:id="@+id/contentEt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:hint="글 내용"/>
     <Button
+        android:id="@+id/selectProductBtn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:text="공구 할 상품 선택" />
     <Button
+        android:id="@+id/writeBtn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="3"

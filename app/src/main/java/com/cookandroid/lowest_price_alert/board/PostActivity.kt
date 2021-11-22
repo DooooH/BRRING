@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import androidx.core.content.ContextCompat
 import com.cookandroid.lowest_price_alert.LoginActivity
 import com.cookandroid.lowest_price_alert.R
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,6 +34,7 @@ class PostActivity : AppCompatActivity() {
         // connect list view
         var postListView = findViewById<ListView>(R.id.postListView)
         var thisIntent = intent
+        // get boardId
         boardId = intent.getStringExtra("boardId").toString()
         Toast.makeText(this, boardId, Toast.LENGTH_SHORT).show()
 
@@ -71,6 +73,7 @@ class PostActivity : AppCompatActivity() {
         // add on click listener to button
         writeBtn.setOnClickListener {
             val intent = Intent(this, WritePostActivity::class.java)
+            intent.putExtra("boardId", boardId)
             startActivity(intent)
         }
 
