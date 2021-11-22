@@ -9,12 +9,11 @@ headers = {
 def parse_search(url):
     response = requests.get(url, headers=headers)
 
-    data = {}
+    data = {'contents': []}
 
     if response.status_code == 200:
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
-        # list = driver.find_element_by_class_name('product_list').text
 
         product_list = soup.find('ul', class_='product_list')
 
@@ -23,6 +22,7 @@ def parse_search(url):
 
         for i in range(0, len(prod_info_list)):
             item = prod_info_list[i]
+            temp = {}
 
             # 각 상품 이미지
             prod_img = item.find('div', class_='thumb_image').find('img')
@@ -35,35 +35,29 @@ def parse_search(url):
                 print(prod_img['src'])
             if 'noImg' in img:
                 continue
-            if 'img' not in data:
-                data['img'] = []
-            data["img"].append(img)
+            temp["img"] = img
 
             # 인기순위, 상품이름 포함
             prod_name = item.find('p', class_='prod_name')
             # 상품명
             name = prod_name.find('a').get_text().strip()
-            # data['name'].append(name)
-            if 'name' not in data:
-                data['name'] = []
-            data['name'].append(name)
+            temp['name'] = name
             print(name)
 
             # 스펙
             prod_spec = item.find('div', class_='spec_list')
             spec = prod_spec.get_text().strip()
-            if 'spec' not in data:
-                data['spec'] = []
-            data["spec"].append(spec)
+            temp['spec'] = spec
             print(spec)
             
             # 가격
             prod_price = item.find('li', class_='rank_one').find('p', class_='price_sect').find('a')
             price = prod_price.get_text().strip()
-            if 'price' not in data:
-                data['price'] = []
-            data['price'].append(price)
+            temp['price'] = price
             print(price)
+
+            # list append
+            data['contents'].append(temp)
 
     print(data)
     return data
