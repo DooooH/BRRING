@@ -61,7 +61,7 @@ class PostActivity : AppCompatActivity() {
                         var product_price = document["product_price"].toString()
                         var title = document["title"].toString()
                         var writer_id = document["writer_id"].toString()
-                        var lb = Post(product_image_url, title, product_name, "한 달 중 최저가", product_price, "댓글 10개")
+                        var lb = Post(product_image_url, title, product_name, "한 달 중 최저가", product_price, "", boardId, postId)
                         postList.add(lb)
                     }
 
