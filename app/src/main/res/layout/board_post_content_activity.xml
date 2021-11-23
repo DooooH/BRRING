@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/productImageIv"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/ipad"/>
+        <TextView
+            android:id="@+id/productNameTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="아이패드 프로 16형 어쩌구말쓰부스"
+            android:textAlignment="center"
+            android:textSize="9pt"
+            android:padding="15dp"/>
+        <TextView
+            android:id="@+id/postTitleTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="아 지금이 진짜 ㄹ 젤 싸다"
+            android:textAlignment="center"
+            android:textSize="11pt"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"/>
+        <TextView
+            android:id="@+id/postContentTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="안녕하세요 지금 아이패드 너무 싸구요 어 저는 경북대학교 쪽문에 살고잇습니다..ㅋ 자취하고 잘취하는 30남 이준하입니다. 관심 잇으신 분은 댓글이나 01072979949로 연락주세요.\n 돼도록 여자분으로요.ㅋ"
+            android:textAlignment="center"
+            android:textSize="10pt"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DFCDFF"
+            android:text="댓글"
+            android:textSize="8pt"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+        <ListView
+            android:id="@+id/commentLv"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/commentContentEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="댓글 내용"/>
+            <Button
+                android:id="@+id/commentSubmitBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="작성" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

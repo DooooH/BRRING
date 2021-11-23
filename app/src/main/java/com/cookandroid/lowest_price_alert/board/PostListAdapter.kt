@@ -36,6 +36,8 @@ class PostListAdapter (val context: Context, val postList: ArrayList<Post>) : Ba
         val option = view.findViewById<TextView>(R.id.option)
         val price = view.findViewById<TextView>(R.id.price)
         val comment = view.findViewById<TextView>(R.id.comment)
+        val postId = view.findViewById<TextView>(R.id.postId)
+        val boardId = view.findViewById<TextView>(R.id.boardId)
 
 
         /* ArrayList<Dog>의 변수 dog의 이미지와 데이터를 ImageView와 TextView에 담는다. */
@@ -47,13 +49,15 @@ class PostListAdapter (val context: Context, val postList: ArrayList<Post>) : Ba
         option.text = post.option
         price.text = post.price
         comment.text = post.comment
+        postId.text = post.postId
+        boardId.text = post.boardId
 
         view.setOnClickListener {
             Toast.makeText(this.context, title.text, Toast.LENGTH_SHORT).show()
-            /*
-            val intent = Intent(this.context, MainActivity::class.java)
+            val intent = Intent(this.context, PostContentActivity::class.java)
+            intent.putExtra("boardId", boardId.text)
+            intent.putExtra("postId", postId.text)
             startActivity(this.context, intent, null)
-             */
         }
 
         return view

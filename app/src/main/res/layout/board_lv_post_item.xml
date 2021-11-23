@@ -51,6 +51,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="댓글 10"/>
+            <TextView
+                android:id="@+id/boardId"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:visibility="gone" />
+            <TextView
+                android:id="@+id/postId"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:visibility="gone" />
 
         </LinearLayout>
 
