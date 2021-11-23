@@ -17,6 +17,10 @@ class WritePostActivity : AppCompatActivity() {
     lateinit var contentEt : EditText
     lateinit var selectProductBtn : Button
     lateinit var writeBtn : Button
+    lateinit var selectedProductEt : EditText
+    lateinit var selectedProductIdEt : EditText
+    lateinit var selectedProductImgPathEt : EditText
+    lateinit var selectedProductPriceEt : EditText
 
     // firestore
     val firestoredb = FirebaseFirestore.getInstance() // firestore db
@@ -37,6 +41,10 @@ class WritePostActivity : AppCompatActivity() {
         contentEt = findViewById(R.id.contentEt)
         selectProductBtn = findViewById(R.id.selectProductBtn)
         writeBtn = findViewById(R.id.writeBtn)
+        selectedProductEt = findViewById(R.id.selectedProductEt)
+        selectedProductIdEt = findViewById(R.id.selectedProductIdEt)
+        selectedProductImgPathEt = findViewById(R.id.selectedProductImgPathEt)
+        selectedProductPriceEt = findViewById(R.id.selectedProductPriceEt)
 
         // get boardId
         boardId = intent.getStringExtra("boardId").toString()
@@ -45,6 +53,15 @@ class WritePostActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         val currentUser = auth?.currentUser
 
+        // select item function
+        selectProductBtn.setOnClickListener {
+            Toast.makeText(this, "APPLE 아이패드 미니 6세대 Wi-Fi 64GB (정품) 선택됨", Toast.LENGTH_SHORT).show()
+            selectedProductEt.setText("APPLE 아이패드 미니 6세대 Wi-Fi 64GB (정품)")
+            selectedProductIdEt.setText("15253217")
+            selectedProductImgPathEt.setText("img.danawa.com/prod_img/500000/217/253/img/15253217_1.jpg?shrink=330:330&_v=20211026140920")
+            selectedProductPriceEt.setText("160000")
+        }
+
         // write function
         writeBtn.setOnClickListener {
             // get today time
@@ -52,14 +69,18 @@ class WritePostActivity : AppCompatActivity() {
             // get elements
             val productTitle = titleEt.text.toString()
             val productContent = contentEt.text.toString()
+            val productId = selectedProductIdEt.text.toString()
+            val productImageUrl = selectedProductImgPathEt.text.toString()
+            val productName = selectedProductEt.text.toString()
+            val productPrice = selectedProductPriceEt.text.toString()
 
             // set post document
             val post = hashMapOf(
                 "created_at" to Timestamp(today.time),
-                "product_id" to "15253217",
-                "product_image_url" to "img.danawa.com/prod_img/500000/217/253/img/15253217_1.jpg?shrink=330:330&_v=20211026140920",
-                "product_name" to "APPLE 아이패드 미니 6세대 Wi-Fi 64GB (정품)",
-                "product_price" to "160000",
+                "product_id" to productId,
+                "product_image_url" to productImageUrl,
+                "product_name" to productName,
+                "product_price" to productPrice,
                 "title" to productTitle,
                 "content" to productContent,
                 "updated_at" to Timestamp(today.time),
