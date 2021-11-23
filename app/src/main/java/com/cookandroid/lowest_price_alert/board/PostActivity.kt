@@ -7,6 +7,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import com.cookandroid.lowest_price_alert.LoginActivity
 import com.cookandroid.lowest_price_alert.R
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class PostActivity : AppCompatActivity() {
@@ -15,6 +16,9 @@ class PostActivity : AppCompatActivity() {
     // firestore
     val firestoredb = FirebaseFirestore.getInstance() // firestore db
     lateinit var boardId : String
+
+    // declare nullable object for Firebase auth
+    private var auth: FirebaseAuth? = null
 
     // posts
     var postList = arrayListOf<Post>()
@@ -28,12 +32,16 @@ class PostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_post_activity)
 
+        //auth 객체 초기화, 인스턴스 get
+        auth = FirebaseAuth.getInstance()
+        val currentUser = auth?.currentUser
+
         // connect view components to variables
         writeBtn = findViewById(R.id.writeBtn)
 
         // connect list view
         var postListView = findViewById<ListView>(R.id.postListView)
-        var thisIntent = intent
+
         // get boardId
         boardId = intent.getStringExtra("boardId").toString()
         Toast.makeText(this, boardId, Toast.LENGTH_SHORT).show()
@@ -72,9 +80,14 @@ class PostActivity : AppCompatActivity() {
 
         // add on click listener to button
         writeBtn.setOnClickListener {
-            val intent = Intent(this, WritePostActivity::class.java)
-            intent.putExtra("boardId", boardId)
-            startActivity(intent)
+            if(currentUser?.uid.toString() == "null"){
+                Toast.makeText(this, "로그인 후 이용해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val intent = Intent(this, WritePostActivity::class.java)
+                intent.putExtra("boardId", boardId)
+                startActivity(intent)
+            }
         }
 
         // connect location board list and list view via adapter
