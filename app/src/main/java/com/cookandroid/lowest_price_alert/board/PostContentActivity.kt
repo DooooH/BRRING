@@ -124,12 +124,24 @@ class PostContentActivity : AppCompatActivity() {
                 // insert comment
                 // get elements
                 val commentContent = commentContentEt.text.toString()
+                var username = ""
+                val uid = auth!!.uid.toString()
+                firestoredb.collection("user").document(uid)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        if(document != null){
+                                username = document["username"].toString()
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
+                    }
 
                 // set post document
                 val comment = hashMapOf(
                     "comment_content" to commentContent,
-                    "username" to "익명이",
-                    "uid" to currentUser?.uid.toString()
+                    "username" to username,
+                    "uid" to uid
                 )
 
                 firestoredb
