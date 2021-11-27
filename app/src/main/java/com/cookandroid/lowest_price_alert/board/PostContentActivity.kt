@@ -132,25 +132,29 @@ class PostContentActivity : AppCompatActivity() {
                         if(document != null){
                                 username = document["username"].toString()
                         }
+                        else{
+                            username = "익명이"
+                        }
+                        // set post document
+                        val comment = hashMapOf(
+                            "comment_content" to commentContent,
+                            "username" to username,
+                            "uid" to uid
+                        )
+
+                        firestoredb
+                            .collection("location_board").document(boardId)
+                            .collection("post").document(postId)
+                            .collection("comment")
+                            .add(comment)
+                            .addOnSuccessListener {Toast.makeText(this,"댓글 작성 완료",Toast.LENGTH_SHORT).show()}
+                            .addOnFailureListener {Toast.makeText(this,"댓글 작성 성공의 어머니",Toast.LENGTH_SHORT).show()}
                     }
                     .addOnFailureListener { exception ->
                         Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
                     }
 
-                // set post document
-                val comment = hashMapOf(
-                    "comment_content" to commentContent,
-                    "username" to username,
-                    "uid" to uid
-                )
 
-                firestoredb
-                    .collection("location_board").document(boardId)
-                    .collection("post").document(postId)
-                    .collection("comment")
-                    .add(comment)
-                    .addOnSuccessListener {Toast.makeText(this,"댓글 작성 완료",Toast.LENGTH_SHORT).show()}
-                    .addOnFailureListener {Toast.makeText(this,"댓글 작성 성공의 어머니",Toast.LENGTH_SHORT).show()}
             }
         }
 
