@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import org.w3c.dom.Text
 
@@ -27,7 +28,7 @@ class ZzimActivity: AppCompatActivity()  {
 
 
                     for(document in product){
-                        val item = Product(document["name"] as String, "close_colored", "sub1", "sub2", document["no"] as String, document.id as String)
+                        val item = Product(document["name"] as String, document["image_url"] as String, "sub1", "sub2", document["no"] as String, document.id as String)
                         val p_no = document["no"].toString()
                         val test = findViewById<TextView>(R.id.test)
                         test.text = document.id.toString()
@@ -81,6 +82,11 @@ class ZzimActivity: AppCompatActivity()  {
 
             val product = ProductList[position]
             val resourceId = context.resources.getIdentifier(product.photo, "drawable", context.packageName)
+
+
+            var url = "http:" + product.photo
+            Glide.with(this.context).load(url)
+                .into(Photo) //이미지 url로 사진 불러오기
             Photo.setImageResource(resourceId)
             name.text = product.name
             sub1.text = product.sub1
