@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">lowest_price_alert</string>
+    <string name="title_search">Search</string>
+    <string name="title_likes">Likes</string>
+    <string name="title_home">Home</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_setting">Setting</string>
 </resources>
