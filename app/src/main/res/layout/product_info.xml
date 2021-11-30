@@ -62,5 +62,11 @@
             android:layout_marginTop="50dp"
             tools:ignore="MissingClass" />
 
+        <Button
+            android:id="@+id/link_Btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="다나와 링크로 이동"/>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 </ScrollView>
