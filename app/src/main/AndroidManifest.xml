@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.cookandroid.lowest_price_alert">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
@@ -50,6 +51,15 @@
         <activity
             android:name=".board.PostContentActivity"
             android:exported="true">
+        </activity>
+        <activity
+            android:name=".MyPageActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".ZzimActivity"
+            android:exported="true"
+            >
         </activity>
 
     </application>
