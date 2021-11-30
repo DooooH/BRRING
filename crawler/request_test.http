@@ -3,3 +3,6 @@ Accept: text/html
 
 ###
 GET http://15.165.67.32:5000/result/태블릿
+
+###
+GET http://127.0.0.1:5000/search?item=태블릿

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import requests
 from bs4 import BeautifulSoup
 
@@ -64,8 +64,13 @@ def parse_search(url):
 
 app = Flask(__name__)
 
-@app.route('/result/<keyword>') #get search result
-def get_result(keyword):
+@app.route('/search') #get search result
+def get_search():
+    param_dict = request.args.to_dict()
+    if len(param_dict) == 0:
+        return 'No parameter'
+
+    keyword = request.args['item']
     url = 'http://search.danawa.com/dsearch.php?k1=' + keyword
     return jsonify(parse_search(url))
 
@@ -73,5 +78,5 @@ def get_result(keyword):
 def hello():
     return 'Hello, World!'
 
-if __name__ == "__main__":
+if __name__ == "__main_":
     app.run(host='0.0.0.0', port='5000')
