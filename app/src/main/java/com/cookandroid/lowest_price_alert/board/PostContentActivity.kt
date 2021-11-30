@@ -124,21 +124,37 @@ class PostContentActivity : AppCompatActivity() {
                 // insert comment
                 // get elements
                 val commentContent = commentContentEt.text.toString()
+                var username = ""
+                val uid = auth!!.uid.toString()
+                firestoredb.collection("user").document(uid)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        if(document != null){
+                                username = document["username"].toString()
+                        }
+                        else{
+                            username = "익명이"
+                        }
+                        // set post document
+                        val comment = hashMapOf(
+                            "comment_content" to commentContent,
+                            "username" to username,
+                            "uid" to uid
+                        )
 
-                // set post document
-                val comment = hashMapOf(
-                    "comment_content" to commentContent,
-                    "username" to "익명이",
-                    "uid" to currentUser?.uid.toString()
-                )
+                        firestoredb
+                            .collection("location_board").document(boardId)
+                            .collection("post").document(postId)
+                            .collection("comment")
+                            .add(comment)
+                            .addOnSuccessListener {Toast.makeText(this,"댓글 작성 완료",Toast.LENGTH_SHORT).show()}
+                            .addOnFailureListener {Toast.makeText(this,"댓글 작성 성공의 어머니",Toast.LENGTH_SHORT).show()}
+                    }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
+                    }
 
-                firestoredb
-                    .collection("location_board").document(boardId)
-                    .collection("post").document(postId)
-                    .collection("comment")
-                    .add(comment)
-                    .addOnSuccessListener {Toast.makeText(this,"댓글 작성 완료",Toast.LENGTH_SHORT).show()}
-                    .addOnFailureListener {Toast.makeText(this,"댓글 작성 성공의 어머니",Toast.LENGTH_SHORT).show()}
+
             }
         }
 
