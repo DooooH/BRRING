@@ -50,6 +50,12 @@
         android:layout_height="wrap_content"
         android:text="API 테스트" />
 
+    <Button
+        android:id="@+id/mypage_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="마이페이지" />
+
     <TextView
         android:id="@+id/signupText"
         android:layout_width="match_parent"
