@@ -13,19 +13,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.github.mikephil.charting.charts.Chart
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.github.mikephil.charting.components.YAxis as YAxis
 
 class ChartActivity : AppCompatActivity() {
     lateinit var lineChart: LineChart
-    lateinit var linkBtn : Button
+    lateinit var linkBtn: Button
     val chartData = ArrayList<ChartData>() // Line Chart에 그리기 위한 데이터를 담을 ArrayList
 
     val channel_name: String = "CHANNEL_1"
@@ -55,6 +57,7 @@ class ChartActivity : AppCompatActivity() {
         var product_name_textView = findViewById<TextView>(R.id.nametext) // 제품명 TextView
         var most_cheap_textview = findViewById<TextView>(R.id.most_cheap) // 최저가 TextView
         var avg_textview = findViewById<TextView>(R.id.average) // 평균가 TextView
+        var now_textview = findViewById<TextView>(R.id.now_price) // 현재가 TextView
         var most_expensive_textview = findViewById<TextView>(R.id.most_expensive) // 최고가 TextView
         var button_zzim = findViewById<Button>(R.id.zzim_button) // 찜하기 버튼
         var product_url_textview = findViewById<TextView>(R.id.url_text) // 이미지 불러오기 test 용
@@ -69,7 +72,6 @@ class ChartActivity : AppCompatActivity() {
                 if (wish_list.get(i).equals(now_product)) {
                     button_zzim.text = "★"
                     is_zzim = i
-
                     break
                 }
             }
@@ -126,6 +128,7 @@ class ChartActivity : AppCompatActivity() {
                 var min_cost = 1000000000 // 최저가 검색을 위한 변수
                 var avg_cost = 0 // 평균가 검색을 위한 변수
                 var total_cost = 0 // 평균가 검색을 위해 모든 가격에 대한 합산을 위한 변수
+                var now_price = 0 // 현재가격
 
                 var change_flag = 0
                 val path = "product_list/" + now_product.toString() // 실시간 db에 접근하기 위한 경로. 현재는 하드코딩.
@@ -138,7 +141,7 @@ class ChartActivity : AppCompatActivity() {
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
                 product_name_textView.text =
-                    "제품명 : " + name // 제품명 textView에 띄우기
+                    name // 제품명 textView에 띄우기
 
                 imageURL = "http://" + imageURL
                 Glide.with(this).load(imageURL)
@@ -185,13 +188,16 @@ class ChartActivity : AppCompatActivity() {
                             }
                             total_cost += price_info.toInt() // 가격 합산 갱신
                             avg_cost = total_cost / count_record // 평균가 갱신
+                            now_price = price_info.toInt()
 
                             most_cheap_textview.text =
-                                "최저가 : " + min_cost.toString() + "원" // textview에 최저가 띄우기
+                                "최저가   " + min_cost.toString() + "원" // textview에 최저가 띄우기
                             most_expensive_textview.text =
-                                "최고가 : " + max_cost.toString() + "원"// textview에 최고가 띄우기
+                                "최고가   " + max_cost.toString() + "원"// textview에 최고가 띄우기
                             avg_textview.text =
-                                "평균가 : " + avg_cost.toString() + "원"// textview에 평균가 띄우기
+                                "평균가   " + avg_cost.toString() + "원"// textview에 평균가 띄우기
+                            now_textview.text =
+                                "현재가   " + now_price.toString() + "원" // textview에 현재가 띄위기
 
                             addChartItem(
                                 today_date,
@@ -243,6 +249,8 @@ class ChartActivity : AppCompatActivity() {
 
     private fun LineChartGraph(chartItem: ArrayList<ChartData>, displayname: String) {
         lineChart = findViewById(R.id.lineChart)
+        lineChart.setDescription("");
+        lineChart.getAxisRight().setDrawLabels(false);
 
         val entries = ArrayList<Entry>()
 
@@ -253,13 +261,17 @@ class ChartActivity : AppCompatActivity() {
         val depenses = LineDataSet(entries, displayname)
         depenses.axisDependency = YAxis.AxisDependency.LEFT
         depenses.valueTextSize = 12f // 값 폰트 지정하여 크게 보이게 하기
-        //depenses.setColors(ColorTemplate.COLORFUL_COLORS) //그래프 색깔
-        depenses.setDrawCubic(true); //선 둥글게 만들기
-        depenses.setDrawFilled(false) //그래프 밑부분 색칠
+        depenses.setColor(Color.parseColor("#800000"))
+        depenses.setCircleColor(Color.parseColor("#800000"))
+        //depenses.setDrawCubic(true); //선 둥글게 만들기
+        //depenses.setDrawFilled(false) //그래프 밑부분 색칠
 
         val labels = ArrayList<String>()
         for (i in chartItem.indices) {
-            labels.add(chartItem[i].dateData) // 그래프 그리기 위해서 날짜 정보 추가
+            var date = chartItem[i].dateData.split('-')
+            var real_date = date[1] + "-" + date[2]
+
+            labels.add(real_date) // 그래프 그리기 위해서 날짜 정보 추가
         }
 
         val dataSets = ArrayList<ILineDataSet>()
