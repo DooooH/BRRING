@@ -3,6 +3,7 @@ package com.cookandroid.lowest_price_alert.board
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -61,42 +62,54 @@ class WritePostActivity : AppCompatActivity() {
 
         // select item function
         selectProductBtn.setOnClickListener {
+            var wishList = arrayListOf<Wish>()
+            var wishListAdapter = WishListAdapter(this, wishList)
+            val view: View = LayoutInflater.from(this)
+                .inflate(R.layout.board_select_wish_activity, null)
+            wishLv = view.findViewById(R.id.wishLv)
+            var dialogView = view
+            var dlg = AlertDialog.Builder(this)
+            dlg.setTitle("공구 상품 선택")
+            dlg.setView(dialogView)
+            dlg.setPositiveButton("확인", null)
+            dlg.setNegativeButton("취소", null)
 
             // get wish items
             firestoredb.collection("user").document(currentUser?.uid.toString())
                 .get()
                 .addOnSuccessListener { document ->
                     val wishlist = document["wish_list"] as ArrayList<String>?
-                    var wishList = arrayListOf<Wish>()
                     if (wishlist != null) {
                         for(productId in wishlist) {
-                            firestoredb.collection("product_list").document(productId)
+                            firestoredb.collection("product_list").whereEqualTo("no", productId)
                                 .get()
-                                .addOnSuccessListener { result ->
-                                    var wishId = document.id.toString()
-                                    var itemId = result.id.toString()
-                                    var itemPhoto = result["image_url"].toString()
-                                    var itemName = result["name"].toString()
-                                    var itemPrice = result["itemPrice"].toString()
-                                    var option = result["option"].toString()
-                                    val wish = Wish(wishId, itemId, itemPhoto, itemName, itemPrice, option)
-                                    wishList.add(wish)
+                                .addOnSuccessListener { results ->
+                                    for (result in results) {
+                                        var wishId = document.id.toString()
+                                        var itemId = result["no"].toString()
+                                        var itemPhoto = result["image_url"].toString()
+                                        var itemName = result["name"].toString()
+                                        var itemPrice = result["itemPrice"].toString()
+                                        var option = result["option"].toString()
+                                        val wish = Wish(
+                                            wishId,
+                                            itemId,
+                                            "ipad",//itemPhoto,
+                                            itemName,
+                                            itemPrice,
+                                            option
+                                        )
+                                        wishList.add(wish)
+                                    }
+
+                                    // connect location board list and list view via adapter
+
+                                    wishLv.adapter = wishListAdapter
+
                                 }
                         }
-
-                        // connect location board list and list view via adapter
-                        var wishListAdapter = WishListAdapter(this, wishList)
-                        val view: View = LayoutInflater.from(this).inflate(R.layout.board_select_wish_activity, null)
-                        wishLv = view.findViewById(R.id.wishLv)
-                        wishLv.adapter = wishListAdapter
-
-                        var dialogView = View.inflate(this, R.layout.board_select_wish_activity, null)
-                        var dlg = AlertDialog.Builder(this)
-                        dlg.setTitle("공구 상품 선택")
-                        dlg.setView(dialogView)
-                        dlg.setPositiveButton("확인",null)
-                        dlg.setNegativeButton("취소", null)
                         dlg.show()
+
                     }
                     else{
                         Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show()
