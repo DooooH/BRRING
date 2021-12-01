@@ -51,7 +51,10 @@
             android:name=".board.PostContentActivity"
             android:exported="true">
         </activity>
-
+        <activity
+            android:name=".UIActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

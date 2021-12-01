@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var searchBtn : Button
     lateinit var searchItem : EditText
 
+    lateinit var uiBtn : Button
+
     // declare nullable object for Firebase auth
     private var auth: FirebaseAuth? = null
 
@@ -31,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         signupText = findViewById(R.id.signupText)
         searchBtn = findViewById(R.id.searchBtn)
         searchItem = findViewById(R.id.search_txt)
+
+        uiBtn = findViewById(R.id.UIBtn)
 
         productBtn.setOnClickListener{
             val intent = Intent(this, ChartActivity::class.java)
@@ -47,6 +51,11 @@ class MainActivity : AppCompatActivity() {
         searchBtn.setOnClickListener{
             val intent = Intent(this, SearchActivity::class.java)
             intent.putExtra("item", searchItem.text.toString())
+            startActivity(intent)
+        }
+
+        uiBtn.setOnClickListener{
+            val intent = Intent(this, UIActivity::class.java)
             startActivity(intent)
         }
 
