@@ -7,14 +7,16 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.cookandroid.lowest_price_alert.fragment.HomeFragment
-import com.cookandroid.lowest_price_alert.fragment.SettingFragment
+import com.cookandroid.lowest_price_alert.fragment.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class UIActivity : AppCompatActivity() {
 
     private val homeFragment = HomeFragment()
     private val settingFragment = SettingFragment()
+    private val searchFragment = SearchFragment()
+    private val likesFragment = LikesFragment()
+    private val cartFragment = CartFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,9 @@ class UIActivity : AppCompatActivity() {
             when(it.itemId) {
                 R.id.navigation_home -> replaceFragment(homeFragment)
                 R.id.navigation_settings -> replaceFragment(settingFragment)
+                R.id.navigation_search -> replaceFragment(searchFragment)
+                R.id.navigation_likes -> replaceFragment(likesFragment)
+                R.id.navigation_cart -> replaceFragment(cartFragment)
             }
             true
         }
