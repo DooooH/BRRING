@@ -68,7 +68,7 @@ class ChartActivity : AppCompatActivity() {
         firestoredb.collection("user").document(now_user).get().addOnSuccessListener { result ->
 
             val wish_list = result["wish_list"] as ArrayList<String>
-            for (i: Int in 0..wish_list.size) { // 이미 찜 목록에 해당 물품이 존재하는지 확인
+            for (i: Int in 0..wish_list.size-1) { // 이미 찜 목록에 해당 물품이 존재하는지 확인
                 if (wish_list.get(i).equals(now_product)) {
                     button_zzim.text = "★"
                     is_zzim = i
