@@ -1,51 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
 
-    <ImageView
-        android:id="@+id/zzim_item_Img"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
-
-    <TextView
-        android:id="@+id/zzim_item_name"
+        />
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/zzim_item_Img"
-        app:layout_constraintTop_toTopOf="@+id/zzim_item_Img"
-        tools:text="Breed"/>
-    <TextView
-        android:id="@+id/zzim_sub1_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/zzim_item_Img"
-        app:layout_constraintStart_toStartOf="@+id/zzim_item_name"
-        tools:text="추가정보 1" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/zzim_sub2_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/zzim_sub1_text"
-        app:layout_constraintStart_toEndOf="@+id/zzim_sub1_text"
-        app:layout_constraintTop_toTopOf="@+id/zzim_sub1_text"
-        tools:text="추가정보 2" />
+        <ImageView
+            android:id="@+id/zzim_item_Img"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_gravity="center"
+            app:srcCompat="@mipmap/ic_launcher_round" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/zzim_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textSize="20dp"
+                tools:text="Breed" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/zzim_sub1_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="15dp"
+                    tools:text="추가정보 1" />
+
+                <TextView
+                    android:id="@+id/zzim_sub2_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/zzim_sub1_text"
+                    app:layout_constraintStart_toEndOf="@+id/zzim_sub1_text"
+                    app:layout_constraintTop_toTopOf="@+id/zzim_sub1_text"
+                    tools:text="추가정보 2" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+
+         />
+</androidx.appcompat.widget.LinearLayoutCompat>
