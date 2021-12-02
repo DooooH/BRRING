@@ -30,10 +30,8 @@ class ZzimActivity: AppCompatActivity()  {
                     for(document in product){
                         val item = Product(document["name"] as String, document["image_url"] as String, "sub1", "sub2", document["no"] as String, document.id as String)
                         val p_no = document["no"].toString()
-                        val test = findViewById<TextView>(R.id.test)
-                        test.text = document.id.toString()
 
-                            for (i: Int in 0..wish_list.size ) {
+                            for (i: Int in 0..wish_list.size-1 ) {
                             if(wish_list[i].equals(p_no)){
                                 productList.add(item)
                                 break
