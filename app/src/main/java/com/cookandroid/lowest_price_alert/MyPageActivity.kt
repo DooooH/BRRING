@@ -20,7 +20,7 @@ class MyPageActivity : AppCompatActivity() {
         setContentView(R.layout.mypage_activity)
 
         var userImage = findViewById<ImageView>(R.id.userImage)
-        Glide.with(this).load(R.drawable.ipad).circleCrop().into(userImage)
+        Glide.with(this).load(R.drawable.junha).circleCrop().into(userImage)
 
         zzim_list_Btn = findViewById(R.id.zzim_list_Btn)
         notice_Btn = findViewById(R.id.notice_Btn)
