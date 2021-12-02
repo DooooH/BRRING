@@ -6,6 +6,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="right"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/back_crop"
+            android:background="#00ff0000"
+            />
+
+        <View
+            android:layout_width="330dp"
+            android:layout_height="35dp"/>
+
+        <ImageButton
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/search_crop"
+            android:background="#00ff0000"
+            />
+
+    </LinearLayout>
+
     <ScrollView
         android:id="@+id/ScrollView1"
         android:layout_width="match_parent"
@@ -46,7 +79,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginLeft="25dp">
 
                     <TextView
                         android:id="@+id/now_price"
@@ -144,7 +178,8 @@
             android:layout_gravity="right"
             android:layout_marginLeft="15dp"
             android:backgroundTint="#7C72D3"
-            android:text="☆" />
+            android:text="☆"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/link_Btn"
@@ -154,7 +189,8 @@
             android:layout_marginRight="15dp"
             android:layout_marginBottom="5dp"
             android:backgroundTint="#7C72D3"
-            android:text="다나와몰에서 확인하기" />
+            android:text="다나와몰에서 확인하기"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 
