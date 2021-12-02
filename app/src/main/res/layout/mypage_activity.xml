@@ -23,7 +23,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="85dp"
             android:orientation="vertical">
 
@@ -67,7 +67,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp">
 
                     <ImageButton
                         android:id="@+id/goto_write_Btn"
@@ -88,7 +89,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp">
 
                     <ImageButton
                         android:id="@+id/document_manage_Btn"
@@ -161,7 +163,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="150dp"></View>
+        android:layout_height="180dp"></View>
 
     <ImageView
         android:layout_width="wrap_content"
