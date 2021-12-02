@@ -81,10 +81,15 @@ fs = firestore.client()
 
 headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}
 url_list = ['http://prod.danawa.com/info/?pcode=15253217',
+            'http://prod.danawa.com/info/?pcode=5347283',
             'http://prod.danawa.com/info/?pcode=7660909',
             'http://prod.danawa.com/info/?pcode=1117155',
             'http://prod.danawa.com/info/?pcode=1152054',
-            'http://prod.danawa.com/info/?pcode=1151075']
+            'http://prod.danawa.com/info/?pcode=1151075',
+            'http://prod.danawa.com/info/?pcode=1239116',
+            'http://prod.danawa.com/info/?pcode=637342',
+            'http://prod.danawa.com/info/?pcode=1008149',
+            'http://prod.danawa.com/info/?pcode=1976482']
 # pcode : 상품코드, cate : category
 
 prod_ref = fs.collection(u'product_list') # firestore
