@@ -25,6 +25,7 @@ class SearchViewActivity : AppCompatActivity() {
 
             val intent = Intent(this, SearchActivity::class.java)
             intent.putExtra("item", searchText.text.toString())
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
 

@@ -38,6 +38,8 @@ class SearchActivity : AppCompatActivity() {
     val firebaseDatabase = FirebaseDatabase.getInstance() // 실시간 데이터 db
     val firestoredb = FirebaseFirestore.getInstance() // firestore db
 
+    val now_user = "nhUKsEBop5beTg2c4jT4vZtYj842" // 하드코딩
+
     @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +51,9 @@ class SearchActivity : AppCompatActivity() {
 
         searchBtn.setOnClickListener(){
             searchText = findViewById<EditText>(R.id.search_txt)
-
             val intent = Intent(this, SearchActivity::class.java)
             intent.putExtra("item", searchText.text.toString())
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
 
@@ -105,31 +107,22 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-//        val llOUterParams: LinearLayout.LayoutParams=LinearLayout.LayoutParams(
-//            LinearLayout.LayoutParams.MATCH_PARENT,
-//            LinearLayout.LayoutParams.WRAP_CONTENT
-//        )
-//        val linearLayout = LinearLayout(this)
-//        linearLayout.layoutParams = llOUterParams
-//
-//        val llParams = LinearLayout.LayoutParams(
-//            LinearLayout.LayoutParams.WRAP_CONTENT,
-//            LinearLayout.LayoutParams.WRAP_CONTENT
-//        )
-//
-//        for (i in 0..3) {
-//            val ll = LinearLayout(this)
-//            ll.orientation  = LinearLayout.VERTICAL
-//        }
-
         gridView.setOnItemClickListener(OnItemClickListener { parent, view, position, id ->
             val product_id : String = nos[position]
+
             firestoredb.collection("product_list").get().addOnSuccessListener { result ->
-                var code : String = ""
+                var code: String = ""
                 for (document in result) {
                     if (document["no"]?.equals(product_id) == true) {
                         code = document.id
                     }
+                }
+                firestoredb.collection("user").document(now_user).get().addOnSuccessListener { result ->
+                    val search_list = result["search_list"] as ArrayList<String>
+                    search_list.add(code)
+
+                    firestoredb.collection("user").document(now_user)
+                        .update("search_list", search_list)
                 }
                 val intent = Intent(this, ChartActivity::class.java)
                 intent.putExtra("product_code", code)
