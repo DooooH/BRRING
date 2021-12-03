@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +44,7 @@ class ChartActivity : AppCompatActivity() {
         setContentView(R.layout.product_info)
         title = "최저가 알리미"
 
+
         val firebaseDatabase = FirebaseDatabase.getInstance() // 실시간 데이터 db
         val firestoredb = FirebaseFirestore.getInstance() // firestore db
 
@@ -53,6 +55,7 @@ class ChartActivity : AppCompatActivity() {
             now_product_no = intent.getStringExtra("product_code").toString()
         }
 
+
         var imageview = findViewById<ImageView>(R.id.imageview) // 제품 사진 ImageView
         var product_name_textView = findViewById<TextView>(R.id.nametext) // 제품명 TextView
         var most_cheap_textview = findViewById<TextView>(R.id.most_cheap) // 최저가 TextView
@@ -60,10 +63,14 @@ class ChartActivity : AppCompatActivity() {
         var now_textview = findViewById<TextView>(R.id.now_price) // 현재가 TextView
         var most_expensive_textview = findViewById<TextView>(R.id.most_expensive) // 최고가 TextView
         var button_zzim = findViewById<Button>(R.id.zzim_button) // 찜하기 버튼
-        var product_url_textview = findViewById<TextView>(R.id.url_text) // 이미지 불러오기 test 용
+        var back_btn = findViewById<ImageButton>(R.id.back_button)
         var days_for_month = arrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31) // 매달 날짜 수
         var is_zzim = -1 // 해당 물품이 찜 목록에 존재하는지 ( -1 : 찜 목록에 없음, num : 찜 목록의 num 번째 index에 해당 물품이 존재)
         linkBtn = findViewById(R.id.link_Btn)
+
+        back_btn.setOnClickListener{
+            onBackPressed()
+        }
 
         firestoredb.collection("user").document(now_user).get().addOnSuccessListener { result ->
 
@@ -118,7 +125,7 @@ class ChartActivity : AppCompatActivity() {
                 val name = result["name"].toString()
 
                 var start_date_info =
-                    StartDate.split("-")
+                    StartDate.split("-") // 시작 날짜 정보 가공 (나중에 업그레이드 해야함)
 
                 var start_year = start_date_info[0].toInt()
                 var start_month = start_date_info[1].toInt()
@@ -131,7 +138,7 @@ class ChartActivity : AppCompatActivity() {
                 var now_price = 0 // 현재가격
 
                 var change_flag = 0
-                val path = "product_list/" + now_product.toString() // 실시간 db에 접근하기 위한 경로. 
+                val path = "product_list/" + now_product.toString() // 실시간 db에 접근하기 위한 경로. 현재는 하드코딩.
                 val myRef: DatabaseReference = firebaseDatabase.getReference(path) // 실시간 db에 접근
 
                 var builder = NotificationCompat.Builder(this, CHANNEL_ID) // 푸쉬 알람 기능
@@ -182,6 +189,17 @@ class ChartActivity : AppCompatActivity() {
                                         builder,
                                         notificationId
                                     ) // 새로 들어온 정보가 최저가이면 알림
+
+                                    firestoredb.collection("user").document(now_user).get()
+                                        .addOnSuccessListener { result ->
+
+                                            val alarm_list = result["alarm_list"] as ArrayList<String>
+                                            alarm_list.add(now_product_no)// 찜 목록에 추가
+
+                                            firestoredb.collection("user").document(now_user)
+                                                .update("alarm_list", alarm_list)
+                                        }
+
                                 }
                                 min_cost =
                                     Math.min(min_cost, price_info.toInt()) // 최저가 갱신
