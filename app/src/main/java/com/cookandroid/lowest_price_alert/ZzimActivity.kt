@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,8 +24,12 @@ class ZzimActivity : AppCompatActivity() {
 
         var zzim_title_text = findViewById<TextView>(R.id.zzim_title)
         var productList = arrayListOf<Product>()
-        var texttest = findViewById<TextView>(R.id.test)
         var str = ""
+        var back_btn = findViewById<ImageButton>(R.id.back_button)
+
+        back_btn.setOnClickListener{
+            onBackPressed()
+        }
 
         firestoredb.collection("user").document(now_user).get().addOnSuccessListener { result ->
             val wish_list = result["wish_list"] as ArrayList<String>
