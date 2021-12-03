@@ -59,7 +59,11 @@ def parse_search(url):
             print(spec)
             
             # 가격
-            prod_price = item.find('li', class_='rank_one').find('p', class_='price_sect').find('a')
+            prod_price = item.find('li', class_='rank_one')
+            if prod_price is not None:
+                prod_price = prod_price.find('p', class_='price_sect').find('a')
+            else:
+                prod_price = item.find('li', class_='top5_item').find('div', class_='top5_price')
             price = prod_price.get_text().strip()
             temp['price'] = price
             print(price)
