@@ -12,3 +12,9 @@ GET http://127.0.0.1:5000/search?item=세제
 
 ###
 GET http://127.0.0.1:5000/search?item=신발
+
+###
+GET http://127.0.0.1:5000/search?item=바지
+
+###
+GET http://127.0.0.1:5000/search?item=신라면

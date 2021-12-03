@@ -25,6 +25,16 @@ def parse_search(url):
             item = prod_info_list[i]
             temp = {}
 
+            # 상품 코드
+            prod_link = item.find('div', class_='thumb_image').find('a')
+            url = prod_link.attrs['href']
+            print(url)
+            queries = dict(parse_qsl(urlparse(url).query))
+            if 'pcode' not in queries: # 외부 링크 제외
+                continue
+            temp['no'] = queries['pcode']
+            print(queries['pcode'])
+
             # 각 상품 이미지
             prod_img = item.find('div', class_='thumb_image').find('img')
             img = ''
@@ -37,13 +47,6 @@ def parse_search(url):
             if 'noImg' in img:
                 continue
             temp["img"] = img
-
-            # 상품 코드
-            prod_link = item.find('div', class_='thumb_image').find('a')
-            url = prod_link.attrs['href']
-            queries = dict(parse_qsl(urlparse(url).query))
-            temp['no'] = queries['pcode']
-            print(queries['pcode'])
 
             # 인기순위, 상품이름 포함
             prod_name = item.find('p', class_='prod_name')
