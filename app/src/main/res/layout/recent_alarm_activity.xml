@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="right"
+            android:layout_marginLeft="15dp"
+            android:background="#00ff0000"
+            android:src="@drawable/back_crop" />
+
+        <TextView
+            android:id="@+id/alarm_title"
+            android:layout_width="330dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:text="최근 알람"
+            android:textSize="18dp" />
+
+        <ImageButton
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp"
+            android:background="#00ff0000"
+            android:src="@drawable/search_crop" />
+
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/alarm_list_view"
+        android:layout_width="380dp"
+        android:layout_height="450dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:divider="#808080"
+        android:dividerHeight="1dp" />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/brring" />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
