@@ -148,17 +148,13 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/url_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginBottom="50dp"
                 tools:ignore="MissingClass" />
 
