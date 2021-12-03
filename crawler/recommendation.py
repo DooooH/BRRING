@@ -60,21 +60,26 @@ def crawl_update(url_list, headers, cur_time):
             spec = soup.find('div', class_='spec_list')
             print(spec.get_text().strip())
 
-            docs = fs.collection(u'recommendation_list').where(u'no', u'==', queries['pcode'])
+            # docs = fs.collection(u'recommendation_list').where(u'no', u'==', queries['pcode']) # recommendation 매번 삭제할 때는 검사안해도 됨
+            docs = fs.collection(u'product_list').where(u'no', u'==', queries['pcode'])
             if len(docs.get()) > 0:
-                doc = fs.collection(u'recommendation_list').document(next(docs.stream()).id)
+                # doc = fs.collection(u'recommendation_list').document(next(docs.stream()).id)
+                doc = fs.collection(u'product_list').document(next(docs.stream()).id)
                 doc.update({u'image_url': img_src['src'],
                                 u'name': name,})
                 print("exists")
             else:
+                # prod_ref 용 data
                 data = {
                     u'image_url': img_src['src'],
                     u'name': name,
                     u'no': queries['pcode'],
-                    u'price': new_price,
                     u'start_date': cur_time
                 }
+                prod_ref.add(data)
+                data[u'price'] = new_price # recommendation 용 data
                 recommendation_ref.add(data)
+
                 print("Not found")
 
 def recommend_crawl_update(headers, cur_time):
@@ -116,6 +121,7 @@ headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit
 # pcode : 상품코드, cate : category
 
 recommendation_ref = fs.collection(u'recommendation_list') # firestore
+prod_ref = fs.collection(u'product_list') # firestore
 
 while True:
     tz = pytz.timezone('Asia/Seoul')
