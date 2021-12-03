@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
+import com.bumptech.glide.Glide
 import com.cookandroid.lowest_price_alert.MainActivity
 import com.cookandroid.lowest_price_alert.R
 
@@ -42,8 +43,9 @@ class PostListAdapter (val context: Context, val postList: ArrayList<Post>) : Ba
 
         /* ArrayList<Dog>의 변수 dog의 이미지와 데이터를 ImageView와 TextView에 담는다. */
         val post = postList[p0]
-        val resourceId = context.resources.getIdentifier(post.photo, "drawable", context.packageName)
-        itemPhoto.setImageResource(resourceId)
+
+        Glide.with(this.context).load("http:" + post.photo)
+            .into(itemPhoto) //이미지 url로 사진 불러오기
         title.text = post.title
         itemName.text = post.itemName
         option.text = post.option

@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.cookandroid.lowest_price_alert.LoginActivity
 import com.cookandroid.lowest_price_alert.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 
 class PostActivity : AppCompatActivity() {
@@ -15,6 +17,7 @@ class PostActivity : AppCompatActivity() {
 
     // firestore
     val firestoredb = FirebaseFirestore.getInstance() // firestore db
+    val firebaseDatabase = FirebaseDatabase.getInstance() // 실시간 데이터 db
     lateinit var boardId : String
 
     // declare nullable object for Firebase auth
@@ -53,20 +56,43 @@ class PostActivity : AppCompatActivity() {
                     for(document in documents){
                         //Toast.makeText(this, "${document.id} : ${document.data}", Toast.LENGTH_LONG).show()
                         var postId = document.id
-                        //var product_image_url = document["product_image_url"].toString()
-                        var product_image_url = "ipad"
+                        var product_image_url = document["product_image_url"].toString()
                         var product_id = document["product_id"].toString()
                         var product_name = document["product_name"].toString()
                         var product_price = document["product_price"].toString()
                         var title = document["title"].toString()
                         var writer_id = document["writer_id"].toString()
-                        var lb = Post(product_image_url, title, product_name, "한 달 중 최저가", product_price, "", boardId, postId)
-                        postList.add(lb)
+
+                        val path = "product_list/$product_id" // 실시간 db에 접근하기 위한 경로.
+                        val myRef: DatabaseReference = firebaseDatabase.getReference(path) // 실시간 db에 접근
+
+                        myRef.addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val snapshot_info = snapshot.child("price")
+
+                                for (item in snapshot_info.children) {
+                                    product_price = item.value.toString()
+                                    Toast.makeText(this@PostActivity,"$product_name 가격정보 : $product_price", Toast.LENGTH_SHORT).show()
+                                }
+
+
+                                var lb = Post(product_image_url, title, product_name, "한 달 중 최저가", product_price, "", boardId, postId)
+                                postList.add(lb)
+
+
+                                // connect location board list and list view via adapter
+                                postListAdapter = PostListAdapter(this@PostActivity, postList)
+                                postListView.adapter = postListAdapter
+                            }
+
+                            override fun onCancelled(error: DatabaseError) { // 실시간 db 접근을 실패하면
+                                println("Failed to read value.")
+                            }
+                        })
+
+
                     }
 
-                    // connect location board list and list view via adapter
-                    postListAdapter = PostListAdapter(this, postList)
-                    postListView.adapter = postListAdapter
 
                 }
                 else{

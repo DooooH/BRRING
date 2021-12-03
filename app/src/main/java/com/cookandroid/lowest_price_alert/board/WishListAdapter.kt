@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.cookandroid.lowest_price_alert.MainActivity
 import com.cookandroid.lowest_price_alert.R
 import org.w3c.dom.Text
@@ -33,14 +34,17 @@ class WishListAdapter (val context: Context, val wishList: ArrayList<Wish>) : Ba
         val wishId = view.findViewById<TextView>(R.id.wishId)
         val itemId = view.findViewById<TextView>(R.id.itemId)
         val itemPhoto = view.findViewById<ImageView>(R.id.itemPhoto)
+        val itemPhotoTv = view.findViewById<TextView>(R.id.itemPhotoTv)
         val itemName = view.findViewById<TextView>(R.id.itemName)
         val option = view.findViewById<TextView>(R.id.option)
         val itemPrice = view.findViewById<TextView>(R.id.itemPrice)
 
         /* ArrayList<Dog>의 변수 dog의 이미지와 데이터를 ImageView와 TextView에 담는다. */
         val wish = wishList[p0]
-        val resourceId = context.resources.getIdentifier(wish.itemPhoto, "drawable", context.packageName)
-        itemPhoto.setImageResource(resourceId)
+
+        Glide.with(this.context).load("http:" + wish.itemPhoto)
+            .into(itemPhoto) //이미지 url로 사진 불러오기
+        itemPhotoTv.text = wish.itemPhoto
         wishId.text = wish.wishId
         itemId.text = wish.itemId
         itemName.text = wish.itemName
