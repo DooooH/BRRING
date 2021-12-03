@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var searchText : Button
 
     lateinit var uiBtn : Button
+    lateinit var mypageBtn: Button
 
     // declare nullable object for Firebase auth
 //    private var auth: FirebaseAuth? = null
@@ -43,6 +44,13 @@ class MainActivity : AppCompatActivity() {
 
         uiBtn.setOnClickListener{
             val intent = Intent(this, UIActivity::class.java)
+            startActivity(intent)
+        }
+
+        mypageBtn = findViewById(R.id.mypage_btn)
+
+        mypageBtn.setOnClickListener{
+            val intent = Intent(this, MyPageActivity::class.java)
             startActivity(intent)
         }
 

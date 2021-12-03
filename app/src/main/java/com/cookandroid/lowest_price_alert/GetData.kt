@@ -11,6 +11,7 @@ data class GetData(
 data class Items(
     val img: String = "",
     val name: String = "",
+    val no: String = "",
     val price: String = "",
-    val spec: String = ""
+    val spec : String = ""
 )

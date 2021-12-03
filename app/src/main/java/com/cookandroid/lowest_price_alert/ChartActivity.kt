@@ -2,12 +2,14 @@ package com.cookandroid.lowest_price_alert
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -36,8 +38,11 @@ class ChartActivity : AppCompatActivity() {
     val notificationId: Int = 1002
 
     val now_user = "nhUKsEBop5beTg2c4jT4vZtYj842"  // 현재 user 하드 코딩
-    var now_product = "15253217" // 현재 물품 하드 코딩
-    var now_product_no = "fQIjkqqMKEQQVbrbcM3v"
+//    var now_product = "15253217" // 현재 물품 하드 코딩
+//    var now_product_no = "fQIjkqqMKEQQVbrbcM3v"
+    lateinit var now_product: String // 현재 물품 하드 코딩
+    lateinit var now_product_no: String
+
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,12 +53,13 @@ class ChartActivity : AppCompatActivity() {
         val firebaseDatabase = FirebaseDatabase.getInstance() // 실시간 데이터 db
         val firestoredb = FirebaseFirestore.getInstance() // firestore db
 
-        if (intent.hasExtra("product_no")) {
+
+        if (intent.hasExtra("product_no") && intent.hasExtra("product_code")){
             now_product = intent.getStringExtra("product_no").toString()
-        }
-        if (intent.hasExtra("product_code")) {
             now_product_no = intent.getStringExtra("product_code").toString()
+            Log.d(ContentValues.TAG, "no, code 둘다 있음!!!! $now_product $now_product_no")
         }
+
 
 
         var imageview = findViewById<ImageView>(R.id.imageview) // 제품 사진 ImageView
