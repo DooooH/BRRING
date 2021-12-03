@@ -4,22 +4,13 @@ import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import com.google.firebase.firestore.util.Assert
-import com.google.gson.Gson
 import com.squareup.okhttp.*
-import org.json.JSONObject
-import org.w3c.dom.Text
-import retrofit2.Retrofit
 import retrofit2.Callback
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
 
 class SearchActivity : AppCompatActivity() {
     lateinit var result_item : TextView
@@ -27,12 +18,31 @@ class SearchActivity : AppCompatActivity() {
     lateinit var inputItem : String
     lateinit var item : List<Items>
     lateinit var gridView : GridView
+    lateinit var searchBtn : Button
+    lateinit var backBtn : Button
+    lateinit var searchText : EditText
 
     @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
-        title = "검색결과"
+        setContentView(R.layout.activity_search_item)
+
+        searchBtn = findViewById<Button>(R.id.searchBtn)
+        backBtn = findViewById<Button>(R.id.backBtn)
+
+
+        searchBtn.setOnClickListener(){
+            searchText = findViewById<EditText>(R.id.search_txt)
+
+            val intent = Intent(this, SearchActivity::class.java)
+            intent.putExtra("item", searchText.text.toString())
+            startActivity(intent)
+        }
+
+        backBtn.setOnClickListener(){
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
         val api = API.create()
 

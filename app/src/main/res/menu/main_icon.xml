@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.elevenzon.toolbar.MainActivity">
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/search"
+        android:orderInCategory="1"
+        android:title="Search"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/bell"
+        android:icon="@drawable/bell"
+        android:orderInCategory="2"
+        android:title="Bell"
+        app:showAsAction="ifRoom|collapseActionView"/>
+</menu>
