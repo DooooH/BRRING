@@ -118,11 +118,11 @@ class ChartActivity : AppCompatActivity() {
                 val name = result["name"].toString()
 
                 var start_date_info =
-                    StartDate.split("-") // 시작 날짜 정보 가공 (나중에 업그레이드 해야함)
+                    StartDate.split("-")
 
                 var start_year = start_date_info[0].toInt()
                 var start_month = start_date_info[1].toInt()
-                var start_date = start_date_info[2].toInt() // 현재 코드는 같은 달 내에서만 작동
+                var start_date = start_date_info[2].toInt()
 
                 var max_cost = 0 // 최고가 검색을 위한 변수
                 var min_cost = 1000000000 // 최저가 검색을 위한 변수
@@ -131,7 +131,7 @@ class ChartActivity : AppCompatActivity() {
                 var now_price = 0 // 현재가격
 
                 var change_flag = 0
-                val path = "product_list/" + now_product.toString() // 실시간 db에 접근하기 위한 경로. 현재는 하드코딩.
+                val path = "product_list/" + now_product.toString() // 실시간 db에 접근하기 위한 경로. 
                 val myRef: DatabaseReference = firebaseDatabase.getReference(path) // 실시간 db에 접근
 
                 var builder = NotificationCompat.Builder(this, CHANNEL_ID) // 푸쉬 알람 기능
@@ -204,7 +204,7 @@ class ChartActivity : AppCompatActivity() {
                                 price_info.toDouble()
                             ) // Chart를 그리기 위해 가격 및 날짜 정보 추가
 
-                            if (now_date >= days_for_month[now_month]) { // 날짜 업데이트 (하루 추가)
+                            if (now_date >= days_for_month[now_month-1]) { // 날짜 업데이트 (하루 추가)
                                 now_date = 1
                                 if (now_month >= 12) {
                                     now_year++
