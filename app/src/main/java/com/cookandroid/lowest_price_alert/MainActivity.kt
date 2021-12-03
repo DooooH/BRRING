@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var chartBtn : Button
     lateinit var mypageBtn : Button
 
+    lateinit var uiBtn : Button
+
     // declare nullable object for Firebase auth
     private var auth: FirebaseAuth? = null
 
@@ -34,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         searchBtn = findViewById(R.id.searchBtn)
         searchItem = findViewById(R.id.search_txt)
         mypageBtn = findViewById(R.id.mypage_btn)
+
+        uiBtn = findViewById(R.id.UIBtn)
 
         productBtn.setOnClickListener{
             val intent = Intent(this, ChartActivity::class.java)
@@ -54,6 +58,11 @@ class MainActivity : AppCompatActivity() {
         }
         mypageBtn.setOnClickListener {
             val intent = Intent(this, MyPageActivity::class.java)
+            startActivity(intent)
+        }
+
+        uiBtn.setOnClickListener{
+            val intent = Intent(this, UIActivity::class.java)
             startActivity(intent)
         }
 
