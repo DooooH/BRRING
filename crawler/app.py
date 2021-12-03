@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import requests
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse, parse_qsl
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}
@@ -36,6 +37,13 @@ def parse_search(url):
             if 'noImg' in img:
                 continue
             temp["img"] = img
+
+            # 상품 코드
+            prod_link = item.find('div', class_='thumb_image').find('a')
+            url = prod_link.attrs['href']
+            queries = dict(parse_qsl(urlparse(url).query))
+            temp['no'] = queries['pcode']
+            print(queries['pcode'])
 
             # 인기순위, 상품이름 포함
             prod_name = item.find('p', class_='prod_name')
