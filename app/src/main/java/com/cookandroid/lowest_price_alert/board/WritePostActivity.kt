@@ -3,7 +3,11 @@ package com.cookandroid.lowest_price_alert.board
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import com.cookandroid.lowest_price_alert.LoginActivity
 import com.cookandroid.lowest_price_alert.R
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +25,9 @@ class WritePostActivity : AppCompatActivity() {
     lateinit var selectedProductIdEt : EditText
     lateinit var selectedProductImgPathEt : EditText
     lateinit var selectedProductPriceEt : EditText
+
+    lateinit var wishLv : ListView
+
 
     // firestore
     val firestoredb = FirebaseFirestore.getInstance() // firestore db
@@ -55,6 +62,69 @@ class WritePostActivity : AppCompatActivity() {
 
         // select item function
         selectProductBtn.setOnClickListener {
+            var wishList = arrayListOf<Wish>()
+            var wishListAdapter = WishListAdapter(this, wishList)
+            val view: View = LayoutInflater.from(this)
+                .inflate(R.layout.board_select_wish_activity, null)
+            wishLv = view.findViewById(R.id.wishLv)
+            var dialogView = view
+            var dlg = AlertDialog.Builder(this)
+            dlg.setTitle("공구 상품 선택")
+            dlg.setView(dialogView)
+            dlg.setPositiveButton("확인", null)
+            dlg.setNegativeButton("취소", null)
+
+            // get wish items
+            firestoredb.collection("user").document(currentUser?.uid.toString())
+                .get()
+                .addOnSuccessListener { document ->
+                    val wishlist = document["wish_list"] as ArrayList<String>?
+                    if (wishlist != null) {
+                        for(productId in wishlist) {
+                            firestoredb.collection("product_list").whereEqualTo("no", productId)
+                                .get()
+                                .addOnSuccessListener { results ->
+                                    for (result in results) {
+                                        var wishId = document.id.toString()
+                                        var itemId = result["no"].toString()
+                                        var itemPhoto = result["image_url"].toString()
+                                        var itemName = result["name"].toString()
+                                        var itemPrice = result["itemPrice"].toString()
+                                        var option = result["option"].toString()
+                                        val wish = Wish(
+                                            wishId,
+                                            itemId,
+                                            "ipad",//itemPhoto,
+                                            itemName,
+                                            itemPrice,
+                                            option
+                                        )
+                                        wishList.add(wish)
+                                    }
+
+                                    // connect location board list and list view via adapter
+
+                                    wishLv.adapter = wishListAdapter
+
+                                }
+                        }
+                        dlg.show()
+
+                    }
+                    else{
+                        Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
+                }
+/*
+            var dialogView = View.inflate(this, R.layout.board_select_wish_activity)
+            var dlg = AlertDialog.Builder(this)
+            dlg.setTitle("공구할 상품 선택")
+*/
+
             Toast.makeText(this, "APPLE 아이패드 미니 6세대 Wi-Fi 64GB (정품) 선택됨", Toast.LENGTH_SHORT).show()
             selectedProductEt.setText("APPLE 아이패드 미니 6세대 Wi-Fi 64GB (정품)")
             selectedProductIdEt.setText("15253217")

@@ -11,6 +11,7 @@ import retrofit2.http.Query
 interface API {
 
     // query: "http:// url~/search?item=생수"
+    // http://121.151.0.53:5000/search?item=생수
     @GET("search")
     fun getSearchItems(
         @Query("item") query: String
@@ -26,7 +27,7 @@ interface API {
 
     companion object {
         // base API url
-        private const val BASE_URL_REST_API = "http://121.151.0.53:5000"
+        private const val BASE_URL_REST_API = "http://15.165.67.32:5000"
 
         fun create(): API {
 //            val httpLoggingInterceptor = HttpLoggingInterceptor()
