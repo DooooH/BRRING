@@ -6,14 +6,24 @@ import time
 from datetime import datetime
 from urllib.parse import urlparse, parse_qsl
 from bs4 import BeautifulSoup
+from selenium import webdriver
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from firebase_admin import db
 
+def delete_collection(coll_ref):
+    docs = coll_ref.stream()
+
+    for doc in docs:
+        print(f'Deleting doc {doc.id} => {doc.to_dict()}')
+        doc.reference.delete()
 
 def crawl_update(url_list, headers, cur_time):
-    for url in url_list:
+    delete_collection(recommendation_ref)
+
+    for i in range(0, 10):
+        url = url_list[i]
         queries = dict(parse_qsl(urlparse(url).query))
         price_ref = db.reference('product_list/' + queries['pcode'] + '/price')  # realtime db
 
@@ -61,12 +71,36 @@ def crawl_update(url_list, headers, cur_time):
                     u'image_url': img_src['src'],
                     u'name': name,
                     u'no': queries['pcode'],
+                    u'price': new_price,
                     u'start_date': cur_time
                 }
                 recommendation_ref.add(data)
                 print("Not found")
 
+def recommend_crawl_update(headers, cur_time):
+    url = 'http://www.danawa.com/'
 
+    driver = webdriver.Chrome(executable_path= r'./chromedriver') # mac
+    driver.get(url)
+
+    html = driver.page_source
+    driver.close()
+    soup = BeautifulSoup(html, 'html.parser')
+
+    total = soup.find('div', class_='main-pick cmPick-swiper')
+
+    a_list = soup.find_all('a', class_='prod-list__link')
+
+    url_list = []
+
+    for a in a_list:
+        href = a.attrs['href']
+        queries = dict(parse_qsl(urlparse(href).query))
+        if "pcode" in queries:
+            # print(queries["pcode"])
+            url_list.append(href)
+
+    crawl_update(url_list, headers, cur_time)
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -78,11 +112,7 @@ firebase_admin.initialize_app(cred, {
 fs = firestore.client()
 
 headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}
-url_list = ['http://prod.danawa.com/info/?pcode=10038267',
-            'http://prod.danawa.com/info/?pcode=15792062',
-            'http://prod.danawa.com/info/?pcode=15781754',
-            'http://prod.danawa.com/info/?pcode=15811076',
-            'http://prod.danawa.com/info/?pcode=8827958']
+
 # pcode : 상품코드, cate : category
 
 recommendation_ref = fs.collection(u'recommendation_list') # firestore
@@ -91,5 +121,5 @@ while True:
     tz = pytz.timezone('Asia/Seoul')
     cur_time = datetime.now(tz).strftime('%Y-%m-%d')  # 년도-월-일 별로 가격
     print(f'Seoul time: {cur_time}')
-    crawl_update(url_list, headers, cur_time)
-    time.sleep(600) # 10분
+    recommend_crawl_update(headers, cur_time)
+    time.sleep(3600 * 6) # 6시간
