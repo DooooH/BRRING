@@ -12,61 +12,82 @@ from firebase_admin import firestore
 from firebase_admin import db
 
 
-def crawl_update(url_list, headers, cur_time):
-    for url in url_list:
-        queries = dict(parse_qsl(urlparse(url).query))
-        price_ref = db.reference('product_list/' + queries['pcode'] + '/price')  # realtime db
+# def crawl_update(url_list, headers, cur_time):
+    # for url in url_list:
+    #     queries = dict(parse_qsl(urlparse(url).query))
+    #     price_ref = db.reference('product_list/' + queries['pcode'] + '/price')  # realtime db
+    #
+    #     response = requests.get(url, headers=headers)
+    #
+    #     if response.status_code == 200:
+    #         html = response.text
+    #         soup = BeautifulSoup(html, 'html.parser')
+    #
+    #         # 가격
+    #         # 새로 가져온 가격이 더 낮을 때만 갱신
+    #         # realtime db 사용
+    #         result = soup.find('em', class_='prc_c')
+    #         new_price = int(re.sub(r'[^0-9]', '', result.get_text()))
+    #         try :
+    #             prev = price_ref.get(cur_time)[0][cur_time]
+    #             if new_price < prev:
+    #                 price_ref.update({cur_time: new_price})
+    #         except:
+    #             price_ref.update({cur_time: new_price})
+    #         print("가격: ", new_price)
+    #
+    #         # 이미지
+    #         img = soup.find('div', class_='photo_w')
+    #         img_src = img.find('img')
+    #         print(img_src['src'])
+    #
+    #         # 이름
+    #         name_tag = soup.find('h3', class_='prod_tit')
+    #         name = name_tag.get_text()
+    #         print(name)
+    #
+    #         # 스펙
+    #         spec = soup.find('div', class_='spec_list')
+    #         print(spec.get_text().strip())
+    #
+    #         docs = fs.collection(u'recommendation_list').where(u'no', u'==', queries['pcode'])
+    #         if len(docs.get()) > 0:
+    #             doc = fs.collection(u'recommendation_list').document(next(docs.stream()).id)
+    #             doc.update({u'image_url': img_src['src'],
+    #                             u'name': name,})
+    #             print("exists")
+    #         else:
+    #             data = {
+    #                 u'image_url': img_src['src'],
+    #                 u'name': name,
+    #                 u'no': queries['pcode'],
+    #                 u'start_date': cur_time
+    #             }
+                # recommendation_ref.add(data)
+    #             print("Not found")
 
-        response = requests.get(url, headers=headers)
+def recommend_crawl_update(url_list, headers, cur_time):
+   url = 'http://www.danawa.com/'
 
-        if response.status_code == 200:
-            html = response.text
-            soup = BeautifulSoup(html, 'html.parser')
+   response = requests.get(url, headers=headers)
 
-            # 가격
-            # 새로 가져온 가격이 더 낮을 때만 갱신
-            # realtime db 사용
-            result = soup.find('em', class_='prc_c')
-            new_price = int(re.sub(r'[^0-9]', '', result.get_text()))
-            try :
-                prev = price_ref.get(cur_time)[0][cur_time]
-                if new_price < prev:
-                    price_ref.update({cur_time: new_price})
-            except:
-                price_ref.update({cur_time: new_price})
-            print("가격: ", new_price)
-
-            # 이미지
-            img = soup.find('div', class_='photo_w')
-            img_src = img.find('img')
-            print(img_src['src'])
-
-            # 이름
-            name_tag = soup.find('h3', class_='prod_tit')
-            name = name_tag.get_text()
-            print(name)
-
-            # 스펙
-            spec = soup.find('div', class_='spec_list')
-            print(spec.get_text().strip())
-
-            docs = fs.collection(u'recommendation_list').where(u'no', u'==', queries['pcode'])
-            if len(docs.get()) > 0:
-                doc = fs.collection(u'recommendation_list').document(next(docs.stream()).id)
-                doc.update({u'image_url': img_src['src'],
-                                u'name': name,})
-                print("exists")
-            else:
-                data = {
-                    u'image_url': img_src['src'],
-                    u'name': name,
-                    u'no': queries['pcode'],
-                    u'start_date': cur_time
-                }
-                recommendation_ref.add(data)
-                print("Not found")
-
-
+   if response.status_code == 200:
+        html = response.text
+        soup = BeautifulSoup(html, 'html.parser')
+        # result = soup.find_all('li', class_='prod-list__item')
+        # result = soup.find_all('a', class_='prod-list__link')
+        print(soup.prettify())
+        # total = soup.find('div', class_='main-pick cmPick-swiper')
+        # print(total)
+        # total = total.find('div', class_='main__cont swiper-wrapper')
+        # for elem in result:
+        #     print(elem)
+        #     print("------------------")
+        # for elem in result:
+        #     a_list = soup.find('a', class_='prod-list__link')
+        #     for a in a_list:
+        #         href = a.attrs['href']
+        #         print(href)
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -85,11 +106,12 @@ url_list = ['http://prod.danawa.com/info/?pcode=10038267',
             'http://prod.danawa.com/info/?pcode=8827958']
 # pcode : 상품코드, cate : category
 
-recommendation_ref = fs.collection(u'recommendation_list') # firestore
+# recommendation_ref = fs.collection(u'recommendation_list') # firestore
 
 while True:
     tz = pytz.timezone('Asia/Seoul')
     cur_time = datetime.now(tz).strftime('%Y-%m-%d')  # 년도-월-일 별로 가격
     print(f'Seoul time: {cur_time}')
-    crawl_update(url_list, headers, cur_time)
+    # crawl_update(url_list, headers, cur_time)
+    recommend_crawl_update(url_list, headers, cur_time)
     time.sleep(600) # 10분
