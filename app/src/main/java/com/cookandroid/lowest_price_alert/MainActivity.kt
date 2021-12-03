@@ -20,11 +20,8 @@ class MainActivity : AppCompatActivity() {
 //    lateinit var chartBtn : Button
 //    lateinit var mypageBtn : Button
     lateinit var searchText : Button
-<<<<<<< Updated upstream
 
     lateinit var uiBtn : Button
-=======
->>>>>>> Stashed changes
 
     // declare nullable object for Firebase auth
 //    private var auth: FirebaseAuth? = null
@@ -40,26 +37,16 @@ class MainActivity : AppCompatActivity() {
 //        searchBtn = findViewById(R.id.searchBtn)
 //        searchItem = findViewById(R.id.search_txt)
 //        mypageBtn = findViewById(R.id.mypage_btn)
-<<<<<<< Updated upstream
 
         uiBtn = findViewById(R.id.UIBtn)
-=======
->>>>>>> Stashed changes
 
 
-<<<<<<< Updated upstream
         uiBtn.setOnClickListener{
             val intent = Intent(this, UIActivity::class.java)
             startActivity(intent)
         }
 
-
         searchText = findViewById<Button>(R.id.search_txt)
-
-=======
-        searchText = findViewById<Button>(R.id.search_txt)
-
->>>>>>> Stashed changes
         searchText.setOnClickListener(){
             val intent = Intent(this, SearchViewActivity::class.java)
             startActivity(intent)
