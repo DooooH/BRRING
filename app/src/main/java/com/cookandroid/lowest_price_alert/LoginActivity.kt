@@ -102,12 +102,10 @@ class LoginActivity : AppCompatActivity() {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
-                Toast.makeText(this, "firebaseAuthWithGoogle:" + account.id, Toast.LENGTH_SHORT).show()
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.d(TAG, "Google sign in failed", e)
-                Toast.makeText(this, "Google sign in failed", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -120,19 +118,17 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
-                    Toast.makeText(this, "signInWithCredential:success", Toast.LENGTH_SHORT).show()
                     val user = auth?.currentUser
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Toast.makeText(this, "signInWithCredential:failure", Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
             }
     }
     private fun updateUI(user: FirebaseUser?) {
-        Toast.makeText(this, user?.uid.toString(), Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, user?.uid.toString(), Toast.LENGTH_SHORT).show()
 
         // if there are user info
         // store user to firestore
@@ -146,16 +142,18 @@ class LoginActivity : AppCompatActivity() {
                     )
                     firestoredb.collection("user").document(user?.uid.toString())
                         .set(currentUser)
-                        .addOnSuccessListener { Toast.makeText(this, "DocumentSnapshot successfully written!", Toast.LENGTH_SHORT).show() }
-                        .addOnFailureListener { e -> Toast.makeText(this, "Error writing document", Toast.LENGTH_SHORT).show() }
+                        .addOnSuccessListener {
+                        //Toast.makeText(this, "DocumentSnapshot successfully written!", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { e ->
+                        //Toast.makeText(this, "Error writing document", Toast.LENGTH_SHORT).show()
+                         }
                 }
                 else{
-                    Toast.makeText(this, "DocumentSnapshot data: ${document.data}", Toast.LENGTH_SHORT).show()
                     Log.d(TAG, "DocumentSnapshot data: ${document.data}")
                 }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
                 Log.w(TAG, "Error getting documents: ", exception)
             }
 

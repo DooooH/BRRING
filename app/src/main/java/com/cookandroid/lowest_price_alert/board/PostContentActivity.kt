@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.w3c.dom.Text
 import java.sql.Timestamp
+import com.bumptech.glide.Glide
 
 class PostContentActivity : AppCompatActivity() {
     // variables for board
@@ -59,7 +60,6 @@ class PostContentActivity : AppCompatActivity() {
         // get postId
         boardId = intent.getStringExtra("boardId").toString()
         postId = intent.getStringExtra("postId").toString()
-        Toast.makeText(this, "postId : " + postId, Toast.LENGTH_SHORT).show()
 
         // get post content from firestore
         firestoredb.collection("location_board").document(boardId)
@@ -69,7 +69,8 @@ class PostContentActivity : AppCompatActivity() {
                 if(document != null){
                     Toast.makeText(this, "${document.id} : ${document.data}", Toast.LENGTH_LONG).show()
                     //var postId = document.id
-                    productImageIv.setImageResource(R.drawable.ipad) // have to change to url
+                    Glide.with(this).load("http:"+document["product_image_url"].toString())
+                        .into(productImageIv) //이미지 url로 사진 불러오기
                     productNameTv.text = document["product_name"].toString()
                     postTitleTv.text = document["title"].toString()
                     postContentTv.text = document["content"].toString()
@@ -129,11 +130,12 @@ class PostContentActivity : AppCompatActivity() {
                 firestoredb.collection("user").document(uid)
                     .get()
                     .addOnSuccessListener { document ->
-                        if(document != null){
+                        if(document != null && document["username"].toString() != "null"){
                                 username = document["username"].toString()
                         }
                         else{
-                            username = "익명이"
+                            // unset username -> use anonymous name
+                            username = "익명"
                         }
                         // set post document
                         val comment = hashMapOf(
@@ -148,7 +150,7 @@ class PostContentActivity : AppCompatActivity() {
                             .collection("comment")
                             .add(comment)
                             .addOnSuccessListener {Toast.makeText(this,"댓글 작성 완료",Toast.LENGTH_SHORT).show()}
-                            .addOnFailureListener {Toast.makeText(this,"댓글 작성 성공의 어머니",Toast.LENGTH_SHORT).show()}
+                            .addOnFailureListener {Toast.makeText(this,"댓글 작성 실패",Toast.LENGTH_SHORT).show()}
                     }
                     .addOnFailureListener { exception ->
                         Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()

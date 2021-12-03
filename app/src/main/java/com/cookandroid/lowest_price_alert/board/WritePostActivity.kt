@@ -1,6 +1,7 @@
 package com.cookandroid.lowest_price_alert.board
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,10 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import com.bumptech.glide.Glide
 import com.cookandroid.lowest_price_alert.LoginActivity
+import com.cookandroid.lowest_price_alert.MainActivity
 import com.cookandroid.lowest_price_alert.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.*
 import java.sql.Date
 import java.sql.Timestamp
 
@@ -21,7 +26,7 @@ class WritePostActivity : AppCompatActivity() {
     lateinit var contentEt : EditText
     lateinit var selectProductBtn : Button
     lateinit var writeBtn : Button
-    lateinit var selectedProductEt : EditText
+    lateinit var selectedProductTv : TextView
     lateinit var selectedProductIdEt : EditText
     lateinit var selectedProductImgPathEt : EditText
     lateinit var selectedProductPriceEt : EditText
@@ -30,6 +35,7 @@ class WritePostActivity : AppCompatActivity() {
 
 
     // firestore
+    val firebaseDatabase = FirebaseDatabase.getInstance() // 실시간 데이터 db
     val firestoredb = FirebaseFirestore.getInstance() // firestore db
 
     // declare nullable object for Firebase auth
@@ -48,7 +54,7 @@ class WritePostActivity : AppCompatActivity() {
         contentEt = findViewById(R.id.contentEt)
         selectProductBtn = findViewById(R.id.selectProductBtn)
         writeBtn = findViewById(R.id.writeBtn)
-        selectedProductEt = findViewById(R.id.selectedProductEt)
+        selectedProductTv = findViewById(R.id.selectedProductTv)
         selectedProductIdEt = findViewById(R.id.selectedProductIdEt)
         selectedProductImgPathEt = findViewById(R.id.selectedProductImgPathEt)
         selectedProductPriceEt = findViewById(R.id.selectedProductPriceEt)
@@ -67,6 +73,7 @@ class WritePostActivity : AppCompatActivity() {
             val view: View = LayoutInflater.from(this)
                 .inflate(R.layout.board_select_wish_activity, null)
             wishLv = view.findViewById(R.id.wishLv)
+            val whytv = view.findViewById<TextView>(R.id.whytv)
             var dialogView = view
             var dlg = AlertDialog.Builder(this)
             dlg.setTitle("공구 상품 선택")
@@ -84,27 +91,54 @@ class WritePostActivity : AppCompatActivity() {
                             firestoredb.collection("product_list").whereEqualTo("no", productId)
                                 .get()
                                 .addOnSuccessListener { results ->
+
                                     for (result in results) {
                                         var wishId = document.id.toString()
                                         var itemId = result["no"].toString()
                                         var itemPhoto = result["image_url"].toString()
                                         var itemName = result["name"].toString()
-                                        var itemPrice = result["itemPrice"].toString()
+                                        var itemPrice = ""
                                         var option = result["option"].toString()
-                                        val wish = Wish(
-                                            wishId,
-                                            itemId,
-                                            "ipad",//itemPhoto,
-                                            itemName,
-                                            itemPrice,
-                                            option
-                                        )
-                                        wishList.add(wish)
+
+                                        val path = "product_list/$itemId" // 실시간 db에 접근하기 위한 경로.
+                                        val myRef: DatabaseReference = firebaseDatabase.getReference(path) // 실시간 db에 접근
+
+                                        myRef.addValueEventListener(object : ValueEventListener {
+                                            override fun onDataChange(snapshot: DataSnapshot) {
+                                                val snapshot_info = snapshot.child("price")
+
+                                                for (item in snapshot_info.children) {
+                                                    itemPrice = item.value.toString()
+                                                }
+
+
+                                                val wish = Wish(
+                                                    wishId,
+                                                    itemId,
+                                                    itemPhoto,//itemPhoto,
+                                                    itemName,
+                                                    itemPrice,
+                                                    option
+                                                )
+                                                wishList.add(wish)
+
+
+                                                // connect location board list and list view via adapter
+
+                                                wishLv.adapter = wishListAdapter
+                                                wishLv.setOnItemClickListener { adapterView, view, i, l ->
+                                                    selectedProductTv.text = view.findViewById<TextView>(R.id.itemName).text
+                                                    selectedProductIdEt.setText(view.findViewById<TextView>(R.id.itemId).text)
+                                                    selectedProductPriceEt.setText(view.findViewById<TextView>(R.id.itemPrice).text)
+                                                    selectedProductImgPathEt.setText(view.findViewById<TextView>(R.id.itemPhotoTv).text)
+                                                }
+                                            }
+
+                                            override fun onCancelled(error: DatabaseError) { // 실시간 db 접근을 실패하면
+                                                println("Failed to read value.")
+                                            }
+                                        })
                                     }
-
-                                    // connect location board list and list view via adapter
-
-                                    wishLv.adapter = wishListAdapter
 
                                 }
                         }
@@ -119,17 +153,6 @@ class WritePostActivity : AppCompatActivity() {
                 .addOnFailureListener { exception ->
                     Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
                 }
-/*
-            var dialogView = View.inflate(this, R.layout.board_select_wish_activity)
-            var dlg = AlertDialog.Builder(this)
-            dlg.setTitle("공구할 상품 선택")
-*/
-
-            Toast.makeText(this, "APPLE 아이패드 미니 6세대 Wi-Fi 64GB (정품) 선택됨", Toast.LENGTH_SHORT).show()
-            selectedProductEt.setText("APPLE 아이패드 미니 6세대 Wi-Fi 64GB (정품)")
-            selectedProductIdEt.setText("15253217")
-            selectedProductImgPathEt.setText("img.danawa.com/prod_img/500000/217/253/img/15253217_1.jpg?shrink=330:330&_v=20211026140920")
-            selectedProductPriceEt.setText("160000")
         }
 
         // write function
@@ -141,7 +164,7 @@ class WritePostActivity : AppCompatActivity() {
             val productContent = contentEt.text.toString()
             val productId = selectedProductIdEt.text.toString()
             val productImageUrl = selectedProductImgPathEt.text.toString()
-            val productName = selectedProductEt.text.toString()
+            val productName = selectedProductTv.text.toString()
             val productPrice = selectedProductPriceEt.text.toString()
 
             // set post document
