@@ -15,6 +15,6 @@
         <ListView
             android:id="@+id/wishLv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
     </ScrollView>
 </LinearLayout>

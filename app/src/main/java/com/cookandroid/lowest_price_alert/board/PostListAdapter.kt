@@ -53,7 +53,7 @@ class PostListAdapter (val context: Context, val postList: ArrayList<Post>) : Ba
         boardId.text = post.boardId
 
         view.setOnClickListener {
-            Toast.makeText(this.context, title.text, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this.context, title.text, Toast.LENGTH_SHORT).show()
             val intent = Intent(this.context, PostContentActivity::class.java)
             intent.putExtra("boardId", boardId.text)
             intent.putExtra("postId", postId.text)

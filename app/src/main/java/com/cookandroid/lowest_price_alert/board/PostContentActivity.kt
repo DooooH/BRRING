@@ -59,7 +59,6 @@ class PostContentActivity : AppCompatActivity() {
         // get postId
         boardId = intent.getStringExtra("boardId").toString()
         postId = intent.getStringExtra("postId").toString()
-        Toast.makeText(this, "postId : " + postId, Toast.LENGTH_SHORT).show()
 
         // get post content from firestore
         firestoredb.collection("location_board").document(boardId)

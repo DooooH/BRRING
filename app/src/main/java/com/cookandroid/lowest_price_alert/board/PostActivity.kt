@@ -44,7 +44,6 @@ class PostActivity : AppCompatActivity() {
 
         // get boardId
         boardId = intent.getStringExtra("boardId").toString()
-        Toast.makeText(this, boardId, Toast.LENGTH_SHORT).show()
 
         // get posts from firestore
         firestoredb.collection("location_board").document(boardId).collection("post")
@@ -52,7 +51,7 @@ class PostActivity : AppCompatActivity() {
             .addOnSuccessListener { documents ->
                 if(documents != null){
                     for(document in documents){
-                        Toast.makeText(this, "${document.id} : ${document.data}", Toast.LENGTH_LONG).show()
+                        //Toast.makeText(this, "${document.id} : ${document.data}", Toast.LENGTH_LONG).show()
                         var postId = document.id
                         //var product_image_url = document["product_image_url"].toString()
                         var product_image_url = "ipad"

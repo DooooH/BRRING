@@ -1,6 +1,7 @@
 package com.cookandroid.lowest_price_alert.board
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -21,7 +22,7 @@ class WritePostActivity : AppCompatActivity() {
     lateinit var contentEt : EditText
     lateinit var selectProductBtn : Button
     lateinit var writeBtn : Button
-    lateinit var selectedProductEt : EditText
+    lateinit var selectedProductTv : TextView
     lateinit var selectedProductIdEt : EditText
     lateinit var selectedProductImgPathEt : EditText
     lateinit var selectedProductPriceEt : EditText
@@ -48,7 +49,7 @@ class WritePostActivity : AppCompatActivity() {
         contentEt = findViewById(R.id.contentEt)
         selectProductBtn = findViewById(R.id.selectProductBtn)
         writeBtn = findViewById(R.id.writeBtn)
-        selectedProductEt = findViewById(R.id.selectedProductEt)
+        selectedProductTv = findViewById(R.id.selectedProductTv)
         selectedProductIdEt = findViewById(R.id.selectedProductIdEt)
         selectedProductImgPathEt = findViewById(R.id.selectedProductImgPathEt)
         selectedProductPriceEt = findViewById(R.id.selectedProductPriceEt)
@@ -67,6 +68,7 @@ class WritePostActivity : AppCompatActivity() {
             val view: View = LayoutInflater.from(this)
                 .inflate(R.layout.board_select_wish_activity, null)
             wishLv = view.findViewById(R.id.wishLv)
+            val whytv = view.findViewById<TextView>(R.id.whytv)
             var dialogView = view
             var dlg = AlertDialog.Builder(this)
             dlg.setTitle("공구 상품 선택")
@@ -105,7 +107,12 @@ class WritePostActivity : AppCompatActivity() {
                                     // connect location board list and list view via adapter
 
                                     wishLv.adapter = wishListAdapter
+                                    wishLv.setOnItemClickListener { adapterView, view, i, l ->
+                                        selectedProductTv.text = view.findViewById<TextView>(R.id.itemName).text
+                                        selectedProductIdEt.setText(view.findViewById<TextView>(R.id.itemId).text)
+                                        selectedProductPriceEt.setText(view.findViewById<TextView>(R.id.itemPrice).text)
 
+                                    }
                                 }
                         }
                         dlg.show()
@@ -126,7 +133,7 @@ class WritePostActivity : AppCompatActivity() {
 */
 
             Toast.makeText(this, "APPLE 아이패드 미니 6세대 Wi-Fi 64GB (정품) 선택됨", Toast.LENGTH_SHORT).show()
-            selectedProductEt.setText("APPLE 아이패드 미니 6세대 Wi-Fi 64GB (정품)")
+            selectedProductTv.setText("APPLE 아이패드 미니 6세대 Wi-Fi 64GB (정품)")
             selectedProductIdEt.setText("15253217")
             selectedProductImgPathEt.setText("img.danawa.com/prod_img/500000/217/253/img/15253217_1.jpg?shrink=330:330&_v=20211026140920")
             selectedProductPriceEt.setText("160000")
@@ -141,7 +148,7 @@ class WritePostActivity : AppCompatActivity() {
             val productContent = contentEt.text.toString()
             val productId = selectedProductIdEt.text.toString()
             val productImageUrl = selectedProductImgPathEt.text.toString()
-            val productName = selectedProductEt.text.toString()
+            val productName = selectedProductTv.text.toString()
             val productPrice = selectedProductPriceEt.text.toString()
 
             // set post document
