@@ -24,32 +24,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="85dp"
+            android:layout_marginTop="80dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:gravity="left"
                 android:text="준하123"
                 android:textColor="#ffffff"
-                android:layout_marginLeft="20dp"
                 android:textSize="20dp" />
 
             <Button
                 android:id="@+id/where_youlive_button"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="> 경북대학교"
+                android:layout_marginLeft="30dp"
                 android:background="#00ff0000"
-                android:textColor="@color/white"
-                android:layout_marginLeft="30dp"/>
+                android:text="> 경북대학교"
+                android:textColor="@color/white" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -59,13 +59,14 @@
 
                     <ImageButton
                         android:id="@+id/zzim_list_Btn"
-                        android:layout_width="wrap_content"
+                        android:layout_width="40dp"
                         android:layout_height="55dp"
+                        android:layout_gravity="center"
                         android:backgroundTint="#7C72D3"
                         android:src="@drawable/star_purple" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="찜한 상품"
@@ -79,14 +80,15 @@
                     android:orientation="vertical">
 
                     <ImageButton
-                        android:id="@+id/goto_write_Btn"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/write_post_Btn"
+                        android:layout_width="40dp"
                         android:layout_height="55dp"
+                        android:layout_gravity="center"
                         android:backgroundTint="#7C72D3"
                         android:src="@drawable/write" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="글 작성"
@@ -101,14 +103,15 @@
 
                     <ImageButton
                         android:id="@+id/document_manage_Btn"
-                        android:layout_width="match_parent"
+                        android:layout_width="40dp"
                         android:layout_height="55dp"
+                        android:layout_gravity="center"
                         android:layout_weight="6"
                         android:backgroundTint="#7C72D3"
                         android:src="@drawable/document_purple" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="글 관리"
@@ -120,9 +123,9 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -137,8 +140,8 @@
             android:id="@+id/notice_Btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="공지사항"
             android:background="#00ff0000"
+            android:text="공지사항"
             android:textColor="#808080" />
 
 
