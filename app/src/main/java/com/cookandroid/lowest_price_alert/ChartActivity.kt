@@ -69,10 +69,15 @@ class ChartActivity : AppCompatActivity() {
         var now_textview = findViewById<TextView>(R.id.now_price) // 현재가 TextView
         var most_expensive_textview = findViewById<TextView>(R.id.most_expensive) // 최고가 TextView
         var button_zzim = findViewById<Button>(R.id.zzim_button) // 찜하기 버튼
-        var back_btn = findViewById<ImageButton>(R.id.back_button)
+        var back_btn = findViewById<ImageButton>(R.id.back_button) // 뒤로가기
+        var btn7 = findViewById<Button>(R.id.btn7)
+        var btn10 = findViewById<Button>(R.id.btn10)
+        var btn15 = findViewById<Button>(R.id.btn15)
         var days_for_month = arrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31) // 매달 날짜 수
         var is_zzim = -1 // 해당 물품이 찜 목록에 존재하는지 ( -1 : 찜 목록에 없음, num : 찜 목록의 num 번째 index에 해당 물품이 존재)
         linkBtn = findViewById(R.id.link_Btn)
+
+        btn15.setBackgroundColor(Color.parseColor("#e9ecef"))
 
         back_btn.setOnClickListener{
             onBackPressed()
@@ -234,14 +239,35 @@ class ChartActivity : AppCompatActivity() {
                                     now_year++
                                     now_month = 1
                                 } else {
-                                    now_month + 1
+                                    now_month += 1
                                 }
                             } else {
                                 now_date++
                             }
                         }
-                        LineChartGraph(chartData, "price") // 그래프 그리기
+                        LineChartGraph(chartData, "price", 15) // 그래프 그리기
                         change_flag = 1
+
+                        btn7.setOnClickListener {
+                            btn7.setBackgroundColor(Color.parseColor("#e9ecef"))
+                            btn10.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            btn15.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            LineChartGraph(chartData, "price",7)
+                        }
+                        btn10.setOnClickListener {
+                            btn7.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            btn10.setBackgroundColor(Color.parseColor("#e9ecef"))
+                            btn15.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            LineChartGraph(chartData, "price",10)
+                        }
+
+                        btn15.setOnClickListener {
+                            btn7.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            btn10.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            btn15.setBackgroundColor(Color.parseColor("#e9ecef"))
+                            LineChartGraph(chartData, "price",15)
+                        }
+
                     }
 
                     override fun onCancelled(error: DatabaseError) { // 실시간 db 접근을 실패하면
@@ -271,15 +297,22 @@ class ChartActivity : AppCompatActivity() {
         chartData.add(item)
     }
 
-    private fun LineChartGraph(chartItem: ArrayList<ChartData>, displayname: String) {
+
+
+    private fun LineChartGraph(chartItem: ArrayList<ChartData>, displayname: String, days : Int) { // 날짜 제한이 있을 경우 그래프
         lineChart = findViewById(R.id.lineChart)
         lineChart.setDescription("");
         lineChart.getAxisRight().setDrawLabels(false);
 
         val entries = ArrayList<Entry>()
-
-        for (i in chartItem.indices) {
-            entries.add(Entry(chartItem[i].priceData.toFloat(), i)) //  그래프 그리기 위해서 가격 정보 추가
+        if(chartItem.size < days) {
+            for (i in chartItem.indices) {
+                entries.add(Entry(chartItem[i].priceData.toFloat(), i)) //  그래프 그리기 위해서 가격 정보 추가
+            }
+        } else{
+            for (i: Int in chartItem.size - days.. chartItem.size-1){ //  날짜 제한이 있을 경우
+                entries.add(Entry(chartItem[i].priceData.toFloat(), i - (chartItem.size - days))) //  그래프 그리기 위해서 가격 정보 추가
+            }
         }
 
         val depenses = LineDataSet(entries, displayname)
@@ -291,11 +324,20 @@ class ChartActivity : AppCompatActivity() {
         //depenses.setDrawFilled(false) //그래프 밑부분 색칠
 
         val labels = ArrayList<String>()
-        for (i in chartItem.indices) {
-            var date = chartItem[i].dateData.split('-')
-            var real_date = date[1] + "-" + date[2]
+        if(chartItem.size < days) {
+            for (i in chartItem.indices) {
+                var date = chartItem[i].dateData.split('-')
+                var real_date = date[1] + "-" + date[2]
 
-            labels.add(real_date) // 그래프 그리기 위해서 날짜 정보 추가
+                labels.add(real_date) // 그래프 그리기 위해서 날짜 정보 추가
+            }
+        } else{
+            for (i: Int in chartItem.size - days.. chartItem.size-1){
+                var date = chartItem[i].dateData.split('-')
+                var real_date = date[1] + "-" + date[2]
+
+                labels.add(real_date) // 그래프 그리기 위해서 날짜 정보 추가
+            }
         }
 
         val dataSets = ArrayList<ILineDataSet>()
@@ -306,6 +348,7 @@ class ChartActivity : AppCompatActivity() {
         lineChart.animateXY(1000, 1000);
         lineChart.invalidate()
     }
+
 
     private fun createNotificationChannel( // 푸쉬 알림 생성
         builder: NotificationCompat.Builder,
