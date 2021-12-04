@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -57,6 +58,21 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, RecentAlarmActivity::class.java)
             startActivity(intent)
         }
+
+        // keyboard option action
+        searchItem.setOnEditorActionListener{ textView, action, event ->
+            var handled = false
+
+            if (action == EditorInfo.IME_ACTION_SEARCH) {
+                // go to search intent
+                val intent = Intent(this, SearchActivity::class.java)
+                intent.putExtra("item", searchItem.text.toString())
+                startActivity(intent)
+            }
+
+            handled
+        }
+        // keyboard option action done
 
         val firestoredb = FirebaseFirestore.getInstance()
         var recomm_product_List = arrayListOf<recomm_Product>()
@@ -216,8 +232,11 @@ class MainActivity : AppCompatActivity() {
                         .into(Photo)
                 } //이미지 url로 사진 불러오기
 
-
-                name?.text = product.name
+                if(product.name.length > 22){
+                    name?.text = product.name.substring(0,22)
+                } else{
+                    name?.text = product.name
+                }
                 sub1?.text = product.price + "원"
                 //sub2?.text = product.sub2
                 sub2?.text = "제품 확인하기 >"
@@ -269,8 +288,12 @@ class MainActivity : AppCompatActivity() {
                         .into(Photo)
                 } //이미지 url로 사진 불러오기
 
+                if(product.name.length > 22){
+                    name?.text = product.name.substring(0,22)
+                } else{
+                    name?.text = product.name
+                }
 
-                name?.text = product.name
                 sub1?.text = product.price + "원"
                 //sub2?.text = product.sub2
                 sub2?.text = "제품 확인하기 >"
