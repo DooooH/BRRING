@@ -73,7 +73,6 @@ class SearchActivity : AppCompatActivity() {
                 call: Call<GetData>,
                 response: Response<GetData>
             ) {
-
                 // 받아온 JSON을 data로 parsing
                 item = response.body()!!.component1()
 
@@ -109,26 +108,40 @@ class SearchActivity : AppCompatActivity() {
 
         gridView.setOnItemClickListener(OnItemClickListener { parent, view, position, id ->
             val product_id : String = nos[position]
+            val intent = Intent(this, ChartActivity::class.java)
 
-            firestoredb.collection("product_list").get().addOnSuccessListener { result ->
-                var code: String = ""
-                for (document in result) {
-                    if (document["no"]?.equals(product_id) == true) {
-                        code = document.id
+            api.getProductNums(product_id).enqueue( // product list에 없을 경우 새로 업데이트 시키기
+                object: Callback<String> {
+                override fun onResponse(
+                    call: Call<String>,
+                    response: Response<String>
+                ) {
+                    Log.d(TAG, "get Product num 성공: $response")
+
+                    firestoredb.collection("product_list").get().addOnSuccessListener { result ->
+                        var code: String = ""
+                        for (document in result) {
+                            if (document["no"]?.equals(product_id) == true) {
+                                code = document.id
+                            }
+                        }
+                        firestoredb.collection("user").document(now_user).get().addOnSuccessListener { result ->
+                            val search_list = result["search_list"] as ArrayList<String>
+                            search_list.add(code)
+
+                            firestoredb.collection("user").document(now_user)
+                                .update("search_list", search_list)
+                        }
+
+                        intent.putExtra("product_code", code)
+                        intent.putExtra("product_no", product_id)
+                        startActivity(intent)
                     }
                 }
-                firestoredb.collection("user").document(now_user).get().addOnSuccessListener { result ->
-                    val search_list = result["search_list"] as ArrayList<String>
-                    search_list.add(code)
-
-                    firestoredb.collection("user").document(now_user)
-                        .update("search_list", search_list)
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.d(TAG, "get Product num 실패 : $t")
                 }
-                val intent = Intent(this, ChartActivity::class.java)
-                intent.putExtra("product_code", code)
-                intent.putExtra("product_no", product_id)
-                startActivity(intent)
-            }
+            })
         })
     }
 

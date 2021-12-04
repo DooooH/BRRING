@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var boardBtn: Button
     lateinit var loginBtn: ImageButton
     lateinit var searchBtn: Button
-    lateinit var searchItem: EditText
     lateinit var mypageBtn: Button
     lateinit var recom_text: TextView
     lateinit var alarm_Btn: ImageButton
@@ -34,8 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         boardBtn = findViewById(R.id.boardBtn)
         loginBtn = findViewById(R.id.login_Btn)
-        searchBtn = findViewById(R.id.searchBtn)
-        searchItem = findViewById(R.id.search_txt)
+        searchBtn = findViewById(R.id.search_txt)
         mypageBtn = findViewById(R.id.mypage_btn)
         recom_text = findViewById(R.id.recom_text)
         alarm_Btn = findViewById(R.id.alarm_btn)
@@ -49,8 +47,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         } // loginBtn onclick listener
         searchBtn.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
-            intent.putExtra("item", searchItem.text.toString())
+            val intent = Intent(this, SearchViewActivity::class.java)
             startActivity(intent)
         }
         mypageBtn.setOnClickListener {

@@ -55,7 +55,7 @@
                 android:layout_height="54dp"
                 android:layout_gravity="center_horizontal">
 
-                <EditText
+                <Button
                     android:id="@+id/search_txt"
                     android:singleLine="true"
                     android:imeOptions="actionSearch"

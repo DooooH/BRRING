@@ -1,5 +1,6 @@
 package com.cookandroid.lowest_price_alert
 
+import com.google.gson.GsonBuilder
 import com.squareup.okhttp.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -16,6 +17,11 @@ interface API {
     fun getSearchItems(
         @Query("item") query: String
     ): Call<GetData>
+
+    @GET("product")
+    fun getProductNums(
+        @Query("no") query: String
+    ): Call<String>
 
 //    @FormUrlEncoded
 //    @POST("v1/papago/n2mt")
@@ -39,6 +45,7 @@ interface API {
 //                    .build()
 //                return@Interceptor it.proceed(request)
 //            }
+            var gson = GsonBuilder().setLenient().create()
 
             val client = OkHttpClient.Builder()
                 .build()
@@ -46,7 +53,7 @@ interface API {
             return Retrofit.Builder()
                 .baseUrl(BASE_URL_REST_API)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
                 .create(API::class.java)
         }
