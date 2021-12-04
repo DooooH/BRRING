@@ -1,8 +1,11 @@
 package com.cookandroid.lowest_price_alert.board
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.cookandroid.lowest_price_alert.LoginActivity
@@ -12,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import org.w3c.dom.Text
 import java.sql.Timestamp
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.auth.User
 
 class PostContentActivity : AppCompatActivity() {
     // variables for board
@@ -23,6 +28,7 @@ class PostContentActivity : AppCompatActivity() {
 
     // declare nullable object for Firebase auth
     private var auth: FirebaseAuth? = null
+    lateinit var currentUser : FirebaseUser
 
     // comments
     var commentList = arrayListOf<Comment>()
@@ -44,7 +50,7 @@ class PostContentActivity : AppCompatActivity() {
 
         //auth 객체 초기화, 인스턴스 get
         auth = FirebaseAuth.getInstance()
-        val currentUser = auth?.currentUser
+        currentUser = auth?.currentUser!!
 
         // connect view components to variables
         productImageIv = findViewById(R.id.productImageIv)
@@ -62,12 +68,40 @@ class PostContentActivity : AppCompatActivity() {
         postId = intent.getStringExtra("postId").toString()
 
         // get post content from firestore
+        getPost()
+
+        // get comments from firestore
+        getComment()
+
+        // add on click listener to button
+        commentSubmitBtn.setOnClickListener {
+            writeComment()
+        }
+        commentContentEt.setOnEditorActionListener{ textView, action, event ->
+            var handled = false
+
+            if (action == EditorInfo.IME_ACTION_DONE) {
+                // hide keyboard
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(commentContentEt.windowToken, 0)
+                handled = true
+
+                // write comment
+                writeComment()
+            }
+
+            handled
+        }
+
+    } // onCreate
+
+    fun getPost(){
         firestoredb.collection("location_board").document(boardId)
             .collection("post").document(postId)
             .get()
             .addOnSuccessListener { document ->
                 if(document != null){
-                    Toast.makeText(this, "${document.id} : ${document.data}", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this, "${document.id} : ${document.data}", Toast.LENGTH_LONG).show()
                     //var postId = document.id
                     Glide.with(this).load("http:"+document["product_image_url"].toString())
                         .into(productImageIv) //이미지 url로 사진 불러오기
@@ -83,7 +117,10 @@ class PostContentActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
             }
 
-        // get comments from firestore
+    }
+
+    fun getComment(){
+        commentList.clear()
         firestoredb.collection("location_board").document(boardId)
             .collection("post").document(postId)
             .collection("comment")
@@ -91,7 +128,7 @@ class PostContentActivity : AppCompatActivity() {
             .addOnSuccessListener { documents ->
                 if(documents != null){
                     for(document in documents){
-                        Toast.makeText(this, "${document.id} : ${document.data}", Toast.LENGTH_LONG).show()
+                        //Toast.makeText(this, "${document.id} : ${document.data}", Toast.LENGTH_LONG).show()
                         var commentId = document.id
                         var uid = document["uid"].toString()
                         var username = document["username"].toString()
@@ -113,59 +150,59 @@ class PostContentActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
             }
 
-        // add on click listener to button
-        commentSubmitBtn.setOnClickListener {
-            if(currentUser?.uid.toString() == "null"){
-                Toast.makeText(this, "로그인 후 이용해주세요.", Toast.LENGTH_SHORT).show()
-            }
-            else if(commentContentEt.text.toString() == ""){
-                Toast.makeText(this, "댓글 내용을 작성해주세요.", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                // insert comment
-                // get elements
-                val commentContent = commentContentEt.text.toString()
-                var username = ""
-                val uid = auth!!.uid.toString()
-                firestoredb.collection("user").document(uid)
-                    .get()
-                    .addOnSuccessListener { document ->
-                        if(document != null && document["username"].toString() != "null"){
-                                username = document["username"].toString()
-                        }
-                        else{
-                            // unset username -> use anonymous name
-                            username = "익명"
-                        }
-                        // set post document
-                        val comment = hashMapOf(
-                            "comment_content" to commentContent,
-                            "username" to username,
-                            "uid" to uid
-                        )
+    }
 
-                        firestoredb
-                            .collection("location_board").document(boardId)
-                            .collection("post").document(postId)
-                            .collection("comment")
-                            .add(comment)
-                            .addOnSuccessListener {Toast.makeText(this,"댓글 작성 완료",Toast.LENGTH_SHORT).show()}
-                            .addOnFailureListener {Toast.makeText(this,"댓글 작성 실패",Toast.LENGTH_SHORT).show()}
+    fun writeComment() {
+        if(currentUser?.uid.toString() == "null"){
+            Toast.makeText(this, "로그인 후 이용해주세요.", Toast.LENGTH_SHORT).show()
+        }
+        else if(commentContentEt.text.toString() == ""){
+            Toast.makeText(this, "댓글 내용을 작성해주세요.", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            // insert comment
+            // get elements
+            val commentContent = commentContentEt.text.toString()
+            var username = ""
+            val uid = auth!!.uid.toString()
+            firestoredb.collection("user").document(uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if(document != null && document["username"].toString() != "null"){
+                        username = document["username"].toString()
                     }
-                    .addOnFailureListener { exception ->
-                        Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
+                    else{
+                        // unset username -> use anonymous name
+                        username = "익명"
                     }
+                    // set post document
+                    val comment = hashMapOf(
+                        "comment_content" to commentContent,
+                        "username" to username,
+                        "uid" to uid
+                    )
+
+                    firestoredb
+                        .collection("location_board").document(boardId)
+                        .collection("post").document(postId)
+                        .collection("comment")
+                        .add(comment)
+                        .addOnSuccessListener {
+                            Toast.makeText(this,"댓글 작성 완료",Toast.LENGTH_SHORT).show()
+                            getComment()
+                            commentContentEt.setText("")
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this,"댓글 작성 실패",Toast.LENGTH_SHORT).show()
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
+                }
 
 
-            }
         }
 
-        /*
-        // connect location board list and list view via adapter
-        commentListAdapter = CommentListAdapter(this, commentList)
-        commentLv.adapter = commentListAdapter
-         */
-
-    } // onCreate
+    }
 
 }

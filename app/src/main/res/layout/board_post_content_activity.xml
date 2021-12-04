@@ -71,6 +71,8 @@
         android:orientation="horizontal">
         <EditText
             android:id="@+id/commentContentEt"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
