@@ -22,7 +22,7 @@ def delete_collection(coll_ref):
 def crawl_update(url_list, headers, cur_time):
     delete_collection(recommendation_ref)
 
-    for i in range(0, 10):
+    for i in range(0, len(url_list)):
         url = url_list[i]
         queries = dict(parse_qsl(urlparse(url).query))
         price_ref = db.reference('product_list/' + queries['pcode'] + '/price')  # realtime db
@@ -74,6 +74,7 @@ def crawl_update(url_list, headers, cur_time):
                     u'image_url': img_src['src'],
                     u'name': name,
                     u'no': queries['pcode'],
+                    u'price': new_price,
                     u'start_date': cur_time
                 }
                 prod_ref.add(data)

@@ -63,6 +63,7 @@ def crawl_update(url_list, headers, cur_time):
                     u'image_url': img_src['src'],
                     u'name': name,
                     u'no': queries['pcode'],
+                    u'price': new_price,
                     u'start_date': cur_time
                 }
                 prod_ref.add(data)
