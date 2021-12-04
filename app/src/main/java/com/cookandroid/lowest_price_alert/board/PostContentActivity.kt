@@ -15,7 +15,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import org.w3c.dom.Text
 import java.sql.Timestamp
 import com.bumptech.glide.Glide
+import com.cookandroid.lowest_price_alert.ChartActivity
+import com.cookandroid.lowest_price_alert.SearchActivity
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.auth.User
 
 class PostContentActivity : AppCompatActivity() {
@@ -42,6 +48,7 @@ class PostContentActivity : AppCompatActivity() {
     lateinit var commentLv : ListView
     lateinit var commentContentEt : EditText
     lateinit var commentSubmitBtn : Button
+    lateinit var productDetailBtn : Button
 
     //onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +66,7 @@ class PostContentActivity : AppCompatActivity() {
         postContentTv = findViewById(R.id.postContentTv)
         commentContentEt = findViewById(R.id.commentContentEt)
         commentSubmitBtn = findViewById(R.id.commentSubmitBtn)
+        productDetailBtn = findViewById(R.id.productDetailBtn)
 
         // connect list view
         commentLv = findViewById(R.id.commentLv)
@@ -104,6 +112,9 @@ class PostContentActivity : AppCompatActivity() {
                     productNameTv.text = document["product_name"].toString()
                     postTitleTv.text = document["title"].toString()
                     postContentTv.text = document["content"].toString()
+
+                    // set product detail link button by product id
+                    productDetailBtnSetOnClickListener(document["product_id"].toString())
                 }
                 else{
                     Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show()
@@ -203,6 +214,32 @@ class PostContentActivity : AppCompatActivity() {
 
 
         }
+
+    }
+
+    fun productDetailBtnSetOnClickListener(no : String){
+
+        // get item code from firestore
+        lateinit var productCode : String
+
+        firestoredb.collection("product_list").whereEqualTo("no", no)
+            .get()
+            .addOnSuccessListener { results ->
+                for (result in results) {
+                    productCode = result.id
+                    }
+
+                productDetailBtn.setOnClickListener {
+                    val intent = Intent(this, ChartActivity::class.java)
+                    intent.putExtra("product_no", no)
+                    intent.putExtra("product_code", productCode)
+                    startActivity(intent)
+                }
+
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
+            }
 
     }
 

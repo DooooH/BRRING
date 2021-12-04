@@ -9,18 +9,23 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.cookandroid.lowest_price_alert.LoginActivity
 import com.cookandroid.lowest_price_alert.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class PostActivity : AppCompatActivity() {
     // variables for board
 
     lateinit var postListView : ListView
 
-    // firestore
+    // firebase
     val firestoredb = FirebaseFirestore.getInstance() // firestore db
     val firebaseDatabase = FirebaseDatabase.getInstance() // 실시간 데이터 db
+    val storage = Firebase.storage // firebase storage
+
     lateinit var boardId : String
 
     // declare nullable object for Firebase auth
@@ -31,7 +36,7 @@ class PostActivity : AppCompatActivity() {
     lateinit var postListAdapter : BaseAdapter
 
     // view components
-    lateinit var writeBtn : Button
+    lateinit var writeBtn : FloatingActionButton
 
     //onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,6 +99,9 @@ class PostActivity : AppCompatActivity() {
                         var product_price = document["product_price"].toString()
                         var title = document["title"].toString()
                         var writer_id = document["writer_id"].toString()
+                        var writer_username = document["writer_username"].toString()
+                        var writer_profile_image = document["writer_user_image"].toString()
+
 
                         val path = "product_list/$product_id" // 실시간 db에 접근하기 위한 경로.
                         val myRef: DatabaseReference = firebaseDatabase.getReference(path) // 실시간 db에 접근
