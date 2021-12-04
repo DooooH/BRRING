@@ -1,5 +1,6 @@
 package com.cookandroid.lowest_price_alert.board
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class PostActivity : AppCompatActivity() {
     // variables for board
+
+    lateinit var postListView : ListView
 
     // firestore
     val firestoredb = FirebaseFirestore.getInstance() // firestore db
@@ -43,12 +46,41 @@ class PostActivity : AppCompatActivity() {
         writeBtn = findViewById(R.id.writeBtn)
 
         // connect list view
-        var postListView = findViewById<ListView>(R.id.postListView)
+        postListView = findViewById(R.id.postListView)
 
         // get boardId
         boardId = intent.getStringExtra("boardId").toString()
 
         // get posts from firestore
+        getPosts()
+
+        // add on click listener to button
+        writeBtn.setOnClickListener {
+            if(currentUser?.uid.toString() == "null"){
+                Toast.makeText(this, "로그인 후 이용해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val intent = Intent(this, WritePostActivity::class.java)
+                intent.putExtra("boardId", boardId)
+                startActivityForResult(intent, 0)
+            }
+        }
+
+    } // onCreate
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK){
+            // 글쓰기 성공 success to write post
+            // ui update
+            getPosts()
+        }
+        else{
+            // 글쓰기 실패 fail to write post
+        }
+    }
+
+    fun getPosts(){
         firestoredb.collection("location_board").document(boardId).collection("post")
             .get()
             .addOnSuccessListener { documents ->
@@ -72,7 +104,7 @@ class PostActivity : AppCompatActivity() {
 
                                 for (item in snapshot_info.children) {
                                     product_price = item.value.toString()
-                                    Toast.makeText(this@PostActivity,"$product_name 가격정보 : $product_price", Toast.LENGTH_SHORT).show()
+                                    //Toast.makeText(this@PostActivity,"$product_name 가격정보 : $product_price", Toast.LENGTH_SHORT).show()
                                 }
 
 
@@ -89,8 +121,6 @@ class PostActivity : AppCompatActivity() {
                                 println("Failed to read value.")
                             }
                         })
-
-
                     }
 
 
@@ -102,23 +132,6 @@ class PostActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
             }
-
-        // add on click listener to button
-        writeBtn.setOnClickListener {
-            if(currentUser?.uid.toString() == "null"){
-                Toast.makeText(this, "로그인 후 이용해주세요.", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                val intent = Intent(this, WritePostActivity::class.java)
-                intent.putExtra("boardId", boardId)
-                startActivity(intent)
-            }
-        }
-
-        // connect location board list and list view via adapter
-        postListAdapter = PostListAdapter(this, postList)
-        postListView.adapter = postListAdapter
-
-    } // onCreate
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.cookandroid.lowest_price_alert.board
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -182,7 +183,12 @@ class WritePostActivity : AppCompatActivity() {
 
             firestoredb.collection("location_board").document(boardId).collection("post")
                 .add(post)
-                .addOnSuccessListener {Toast.makeText(this,"성공",Toast.LENGTH_SHORT).show()}
+                .addOnSuccessListener {
+                    Toast.makeText(this,"성공",Toast.LENGTH_SHORT).show()
+                    var outIntent = Intent(applicationContext, PostActivity::class.java)
+                    setResult(Activity.RESULT_OK, outIntent)
+                    finish()
+                }
                 .addOnFailureListener {Toast.makeText(this,"성공의 어머니",Toast.LENGTH_SHORT).show()}
 
         }
