@@ -81,7 +81,7 @@ firebase_admin.initialize_app(cred, {
 fs = firestore.client()
 
 headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}
-url_list = ['http://prod.danawa.com/info/?pcode=15253217',
+static_url = ['http://prod.danawa.com/info/?pcode=15253217',
             'http://prod.danawa.com/info/?pcode=5347283',
             'http://prod.danawa.com/info/?pcode=7660909',
             'http://prod.danawa.com/info/?pcode=1117155',
@@ -94,10 +94,24 @@ url_list = ['http://prod.danawa.com/info/?pcode=15253217',
 # pcode : 상품코드, cate : category
 
 prod_ref = fs.collection(u'product_list') # firestore
+url_ref = fs.collection(u'url_list')
+
+for url in static_url:
+    queries = dict(parse_qsl(urlparse(url).query))
+    url_data = {
+        u'pcode': queries['pcode'],
+        u'url': url
+    }
+    url_ref.add(url_data)
 
 while True:
     tz = pytz.timezone('Asia/Seoul')
     cur_time = datetime.now(tz).strftime('%Y-%m-%d')  # 년도-월-일 별로 가격
     print(f'Seoul time: {cur_time}')
+    url_list = []
+    docs = url_ref.stream()
+    for doc in docs:
+        url_list.append(doc.to_dict()['url'])
+    # print(url_list)
     crawl_update(url_list, headers, cur_time)
     time.sleep(600) # 10분

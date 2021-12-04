@@ -17,6 +17,11 @@ def delete_collection(coll_ref):
 
     for doc in docs:
         print(f'Deleting doc {doc.id} => {doc.to_dict()}')
+        url_docs = fs.collection(u'url_list').where(u'pcode', u'==', doc.to_dict()['no'])
+        if len(url_docs.get()) > 0:
+            url_doc =fs.collection(u'url_list').document(next(docs.stream()).id)
+            print(f'Deleting doc {url_doc.id} => {url_doc.to_dict()}')
+            url_doc.reference.delete()
         doc.reference.delete()
 
 def crawl_update(url_list, headers, cur_time):
@@ -80,28 +85,37 @@ def crawl_update(url_list, headers, cur_time):
                 prod_ref.add(data)
                 data[u'price'] = new_price # recommendation 용 data
                 recommendation_ref.add(data)
-
+                url_data = {
+                    u'pcode': queries['pcode'],
+                    u'url': url
+                }
+                url_ref.add(url_data)
                 print("Not found")
 
 def recommend_crawl_update(headers, cur_time):
     url = 'http://www.danawa.com/'
 
     driver = webdriver.Chrome(executable_path= r'./chromedriver') # mac
+    driver.implicitly_wait(100)
     driver.get(url)
+    driver.implicitly_wait(1000)
 
     html = driver.page_source
-    driver.close()
     soup = BeautifulSoup(html, 'html.parser')
-
+    driver.close()
+    # print(soup.prettify())
     total = soup.find('div', class_='main-pick cmPick-swiper')
 
     a_list = soup.find_all('a', class_='prod-list__link')
+
+    # print(total.prettify())
 
     url_list = []
 
     for a in a_list:
         href = a.attrs['href']
         queries = dict(parse_qsl(urlparse(href).query))
+        # print(href)
         if "pcode" in queries:
             # print(queries["pcode"])
             url_list.append(href)
@@ -123,6 +137,7 @@ headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit
 
 recommendation_ref = fs.collection(u'recommendation_list') # firestore
 prod_ref = fs.collection(u'product_list') # firestore
+url_ref = fs.collection(u'url_list') # firestore
 
 while True:
     tz = pytz.timezone('Asia/Seoul')
