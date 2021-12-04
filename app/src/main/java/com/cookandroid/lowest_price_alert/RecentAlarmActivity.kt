@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import org.w3c.dom.Text
@@ -26,8 +27,63 @@ class RecentAlarmActivity : AppCompatActivity() {
         var str = ""
         var back_btn = findViewById<ImageButton>(R.id.back_button)
         var alarm_text = findViewById<TextView>(R.id.alarm_title)
+        var swipe = findViewById<SwipeRefreshLayout>(R.id.swipe)
+
+        swipe.setOnRefreshListener {
+            alarmList.clear()
+            firestoredb.collection("user").document(now_user).get().addOnSuccessListener { result ->
+                val alarm_list = result["alarm_list"] as ArrayList<String>
+                alarm_text.text = "최근 알람 (" + alarm_list.size.toString() + ")"
+                firestoredb.collection("product_list").get()
+                    .addOnSuccessListener { product ->
+
+                        for (i: Int in 0..alarm_list.size - 1) {
+                            alarm_list[i] = alarm_list[i].replace(" ", "")
+
+                        }
+                        for (i: Int in 0..alarm_list.size - 1) {
+                            for (document in product) {
+
+                                val item = Alarm(
+                                    document["name"] as String,
+                                    document.id,
+                                    document["no"] as String,
+                                    document["image_url"] as String
+                                )
+                                val p_no = document.id.toString()
 
 
+                                if (alarm_list[i].equals(p_no) == true) {
+
+                                    alarmList.add(item)
+                                }
+                            }
+
+
+                            var alarm_list_view = findViewById<ListView>(R.id.alarm_list_view)
+                            val alarmAdapter = MainListAdapter(this, alarmList)
+                            alarm_list_view.adapter = alarmAdapter
+
+
+
+
+                            alarm_list_view.setOnItemClickListener { parent, view, position, id ->
+
+                                val code = alarmList.get(position).product_code
+                                var number = alarmList.get(position).product_no
+
+
+                                val intent = Intent(this, ChartActivity::class.java)
+                                intent.putExtra("product_code", code.toString())
+                                intent.putExtra("product_no", number.toString())
+                                startActivity(intent)
+                            }
+                        }
+
+                    }
+            }
+            swipe.isRefreshing = false
+        }
         back_btn.setOnClickListener {
             onBackPressed()
         }
