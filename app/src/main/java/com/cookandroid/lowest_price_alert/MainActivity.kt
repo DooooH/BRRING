@@ -219,8 +219,11 @@ class MainActivity : AppCompatActivity() {
                         .into(Photo)
                 } //이미지 url로 사진 불러오기
 
-
-                name?.text = product.name
+                if(product.name.length > 22){
+                    name?.text = product.name.substring(0,22)
+                } else{
+                    name?.text = product.name
+                }
                 sub1?.text = product.price + "원"
                 //sub2?.text = product.sub2
                 sub2?.text = "제품 확인하기 >"
@@ -272,8 +275,12 @@ class MainActivity : AppCompatActivity() {
                         .into(Photo)
                 } //이미지 url로 사진 불러오기
 
+                if(product.name.length > 22){
+                    name?.text = product.name.substring(0,22)
+                } else{
+                    name?.text = product.name
+                }
 
-                name?.text = product.name
                 sub1?.text = product.price + "원"
                 //sub2?.text = product.sub2
                 sub2?.text = "제품 확인하기 >"
