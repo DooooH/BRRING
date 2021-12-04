@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -26,6 +27,61 @@ class ZzimActivity : AppCompatActivity() {
         var productList = arrayListOf<Product>()
         var str = ""
         var back_btn = findViewById<ImageButton>(R.id.back_button)
+        var swipe = findViewById<SwipeRefreshLayout>(R.id.swipe)
+
+
+        swipe.setOnRefreshListener {
+            productList.clear()
+            firestoredb.collection("user").document(now_user).get().addOnSuccessListener { result ->
+                val wish_list = result["wish_list"] as ArrayList<String>
+                firestoredb.collection("product_list").get()
+                    .addOnSuccessListener { product ->
+
+                        zzim_title_text.text = "찜한 상품 (" + wish_list.size.toString() + ")"
+
+                        for (document in product) {
+                            val item = Product(
+                                document["name"] as String,
+                                document["image_url"] as String,
+                                "sub1",
+                                "sub2",
+                                document["no"] as String,
+                                document.id as String
+                            )
+                            val p_no = document["no"].toString()
+
+                            for (i: Int in 0..wish_list.size - 1) {
+                                if (wish_list[i].equals(p_no)) {
+                                    productList.add(item)
+                                    str += item.photo.toString() + "\n"
+                                    break
+                                }
+                            }
+
+                            var zzim_list_view = findViewById<ListView>(R.id.zzim_list_view)
+                            val zzimAdapter = MainListAdapter(this, productList)
+                            zzim_list_view.adapter = zzimAdapter
+
+
+
+
+                            zzim_list_view.setOnItemClickListener { parent, view, position, id ->
+
+                                val number = productList.get(position).no
+                                val code = productList.get(position).product_code
+                                val intent = Intent(this, ChartActivity::class.java)
+                                intent.putExtra("product_code", code.toString())
+                                intent.putExtra("product_no", number.toString())
+                                startActivity(intent)
+                            }
+                        }
+
+                    }
+
+
+            }
+            swipe.isRefreshing = false
+        }
 
         back_btn.setOnClickListener{
             onBackPressed()
@@ -90,6 +146,7 @@ class ZzimActivity : AppCompatActivity() {
         val no: String,
         val product_code: String
     )
+
 
     class MainListAdapter(val context: Context, val ProductList: ArrayList<Product>) :
         BaseAdapter() {
