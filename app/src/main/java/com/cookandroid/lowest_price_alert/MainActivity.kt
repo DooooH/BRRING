@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        /*
         // keyboard option action
         searchItem.setOnEditorActionListener{ textView, action, event ->
             var handled = false
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity() {
             handled
         }
         // keyboard option action done
+         */
 
         val firestoredb = FirebaseFirestore.getInstance()
         var recomm_product_List = arrayListOf<recomm_Product>()
