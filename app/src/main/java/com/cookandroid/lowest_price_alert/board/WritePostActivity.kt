@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
@@ -74,13 +75,13 @@ class WritePostActivity : AppCompatActivity() {
             val view: View = LayoutInflater.from(this)
                 .inflate(R.layout.board_select_wish_activity, null)
             wishLv = view.findViewById(R.id.wishLv)
-            val whytv = view.findViewById<TextView>(R.id.whytv)
             var dialogView = view
             var dlg = AlertDialog.Builder(this)
             dlg.setTitle("공구 상품 선택")
             dlg.setView(dialogView)
             dlg.setPositiveButton("확인", null)
             dlg.setNegativeButton("취소", null)
+
 
             // get wish items
             firestoredb.collection("user").document(currentUser?.uid.toString())

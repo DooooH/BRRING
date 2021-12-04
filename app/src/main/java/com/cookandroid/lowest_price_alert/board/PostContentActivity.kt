@@ -81,13 +81,9 @@ class PostContentActivity : AppCompatActivity() {
             var handled = false
 
             if (action == EditorInfo.IME_ACTION_DONE) {
-                // hide keyboard
-                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(commentContentEt.windowToken, 0)
-                handled = true
-
                 // write comment
                 writeComment()
+                handled = true
             }
 
             handled
@@ -191,6 +187,11 @@ class PostContentActivity : AppCompatActivity() {
                             Toast.makeText(this,"댓글 작성 완료",Toast.LENGTH_SHORT).show()
                             getComment()
                             commentContentEt.setText("")
+                            var handled = false
+                            // hide keyboard
+                            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            inputMethodManager.hideSoftInputFromWindow(commentContentEt.windowToken, 0)
+                            handled = true
                         }
                         .addOnFailureListener {
                             Toast.makeText(this,"댓글 작성 실패",Toast.LENGTH_SHORT).show()
