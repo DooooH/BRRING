@@ -83,27 +83,35 @@ def parse_search(url):
         html = response.text
         soup = BeautifulSoup(html, 'lxml')
 
-        product_list = soup.find('ul', class_='product_list')
+        # product_list = soup.find('ul', class_='product_list')
 
         # 각 상품 정보
-        prod_info_list = product_list.find_all('div', class_='prod_main_info')
+        # prod_info_list = product_list.find_all('div', class_='prod_main_info')
+        prod_info_list = soup.find_all('div', class_='prod_main_info')
 
         for i in range(0, len(prod_info_list)):
             item = prod_info_list[i]
             temp = {}
 
+            if i == 0:
+                print(item.prettify())
             # 상품 코드
-            prod_link = item.find('div', class_='thumb_image').find('a')
+            # thumb = item.find('div', class_='thumb_image')
+            # prod_link = thumb.find('a')
+            prod_link = item.find('a', class_='thumb_link click_log_product_standard_img_')
+            if prod_link is None:
+                continue
             url = prod_link.attrs['href']
             print(url)
             queries = dict(parse_qsl(urlparse(url).query))
-            if 'pcode' not in queries: # 외부 링크 제외
-                continue
+            # if 'pcode' not in queries: # 외부 링크 제외
+            #     continue
             temp['no'] = queries['pcode']
             print(queries['pcode'])
 
             # 각 상품 이미지
-            prod_img = item.find('div', class_='thumb_image').find('img')
+            # prod_img = thumb.find('img')
+            prod_img = prod_link.find('img')
             img = ''
             if prod_img.has_attr('data-original'):
                 img = prod_img['data-original']
@@ -143,6 +151,8 @@ def parse_search(url):
 
     print("processing time :", time.time() - start)  # 현재시각 - 시작시간 = 실행 시간
     print(data)
+    print(len(data['contents']))
+    print(data['contents'])
     return data
 
 app = Flask(__name__)
