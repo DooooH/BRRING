@@ -1,6 +1,9 @@
 import os
 import re
 import pytz
+import time
+import lxml
+import cchardet
 from datetime import datetime
 from flask import Flask, jsonify, request
 import requests
@@ -23,7 +26,7 @@ def new_crawl(url_list, headers, cur_time, pcode):
 
         if response.status_code == 200:
             html = response.text
-            soup = BeautifulSoup(html, 'html.parser')
+            soup = BeautifulSoup(html, 'lxml')
 
             # 가격
             # 새로 가져온 가격이 더 낮을 때만 갱신
@@ -74,9 +77,11 @@ def parse_search(url):
 
     data = {'contents': []}
 
+    start = time.time()
+
     if response.status_code == 200:
         html = response.text
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html, 'lxml')
 
         product_list = soup.find('ul', class_='product_list')
 
@@ -136,6 +141,7 @@ def parse_search(url):
             # list append
             data['contents'].append(temp)
 
+    print("processing time :", time.time() - start)  # 현재시각 - 시작시간 = 실행 시간
     print(data)
     return data
 
@@ -177,6 +183,12 @@ def get_product():
         print(f'Seoul time: {cur_time}')
         url_list = ['http://prod.danawa.com/info/?pcode=' + pcode]
         new_crawl(url_list, headers, cur_time, pcode)
+
+    # data = {'contents': [
+    #     {
+    #         u'result': 'Success'
+    #     }
+    # ]}
     return 'Success'
 
 @app.route('/')
