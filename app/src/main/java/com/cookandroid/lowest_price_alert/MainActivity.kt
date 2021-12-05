@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.cookandroid.lowest_price_alert.board.BoardActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
     // variables for product test
@@ -239,7 +240,9 @@ class MainActivity : AppCompatActivity() {
                 } else{
                     name?.text = product.name
                 }
-                sub1?.text = product.price + "원"
+                val t_dec_down = DecimalFormat("#,###")
+                var temp = t_dec_down.format(product.price.toInt())
+                sub1?.text = temp + "원"
                 //sub2?.text = product.sub2
                 sub2?.text = "제품 확인하기 >"
 
@@ -296,7 +299,9 @@ class MainActivity : AppCompatActivity() {
                     name?.text = product.name
                 }
 
-                sub1?.text = product.price + "원"
+                val t_dec_down = DecimalFormat("#,###")
+                var temp = t_dec_down.format(product.price.toInt())
+                sub1?.text = temp + "원"
                 //sub2?.text = product.sub2
                 sub2?.text = "제품 확인하기 >"
 
