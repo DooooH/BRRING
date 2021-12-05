@@ -55,14 +55,21 @@ BaseAdapter() {
         Glide.with(context)
             .load("http:"+imageArray[position])
             .into(imageView)
-        nameView.text = nameInWords[position]
+        if(nameInWords[position].length > 28){
+            nameView.text = nameInWords[position].substring(0,28) + " ..."
+        }else{
+            nameView.text = nameInWords[position]
+        }
+
+
+
         priceView.text = priceInWords[position]
 
         if(specInWords[position].length > 100)
         {
-            specView.text = specInWords[position].substring(0,100) + "..." + "\n\n" + "> 제품 확인하기"
+            specView.text = specInWords[position].substring(0,100) + "..."
         } else {
-            specView.text = specInWords[position]+ "\n\n" + "> 제품 확인하기"
+            specView.text = specInWords[position]+ "\n\n"
         }
 
         return convertView
