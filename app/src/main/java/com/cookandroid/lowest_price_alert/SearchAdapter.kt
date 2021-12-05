@@ -57,7 +57,13 @@ BaseAdapter() {
             .into(imageView)
         nameView.text = nameInWords[position]
         priceView.text = priceInWords[position]
-        specView.text = specInWords[position]
+
+        if(specInWords[position].length > 100)
+        {
+            specView.text = specInWords[position].substring(0,100) + "..." + "\n\n" + "> 제품 확인하기"
+        } else {
+            specView.text = specInWords[position]+ "\n\n" + "> 제품 확인하기"
+        }
 
         return convertView
     }
