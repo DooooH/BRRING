@@ -1,6 +1,7 @@
 package com.cookandroid.lowest_price_alert.board
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
@@ -169,31 +171,69 @@ class WritePostActivity : AppCompatActivity() {
             val productName = selectedProductTv.text.toString()
             val productPrice = selectedProductPriceEt.text.toString()
 
-            // set post document
-            val post = hashMapOf(
-                "created_at" to Timestamp(today.time),
-                "product_id" to productId,
-                "product_image_url" to productImageUrl,
-                "product_name" to productName,
-                "product_price" to productPrice,
-                "title" to productTitle,
-                "content" to productContent,
-                "updated_at" to Timestamp(today.time),
-                "writer_id" to currentUser?.uid.toString()
-            )
+            // if there are no title or no content
+            if (productContent == "" || productTitle == "") {
+                Toast.makeText(this, "글 제목과 내용을 작성해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            else if (productName == "선택상품 없음"){
+                Toast.makeText(this, "공동구매 할 상품을 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                // get current user username, profile image
+                val uid = auth!!.uid.toString()
+                var username = ""
+                var profile_image = ""
+                firestoredb.collection("user").document(uid)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        username =
+                            if (document != null && document["username"].toString() != "null") {
+                                document["username"].toString()
+                            } else {
+                                // unset username -> use anonymous name
+                                "익명"
+                            }
+                        profile_image =
+                            if (document != null && document["profile_image"].toString() != "null") {
+                                document["profile_image"].toString()
+                            } else {
+                                "user-profile/no_profile.png"
+                            }
+                        // set post document
+                        val post = hashMapOf(
+                            "created_at" to Timestamp(today.time),
+                            "product_id" to productId,
+                            "product_image_url" to productImageUrl,
+                            "product_name" to productName,
+                            "product_price" to productPrice,
+                            "title" to productTitle,
+                            "content" to productContent,
+                            "updated_at" to Timestamp(today.time),
+                            "writer_id" to uid,
+                            "writer_username" to username,
+                            "writer_profile_image" to profile_image
+                        )
 
-            firestoredb.collection("location_board").document(boardId).collection("post")
-                .add(post)
-                .addOnSuccessListener {
-                    Toast.makeText(this,"성공",Toast.LENGTH_SHORT).show()
-                    var outIntent = Intent(applicationContext, PostActivity::class.java)
-                    setResult(Activity.RESULT_OK, outIntent)
-                    finish()
-                }
-                .addOnFailureListener {Toast.makeText(this,"성공의 어머니",Toast.LENGTH_SHORT).show()}
+                        firestoredb.collection("location_board").document(boardId)
+                            .collection("post")
+                            .add(post)
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "게시글 작성 완료", Toast.LENGTH_SHORT).show()
 
+                                var outIntent = Intent(applicationContext, PostActivity::class.java)
+                                setResult(Activity.RESULT_OK, outIntent)
+                                finish()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, "게시글 작성 실패", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(this, "Error getting documents: ", Toast.LENGTH_SHORT).show()
+                    }
+
+            }
         }
-
 
     } // onCreate
 

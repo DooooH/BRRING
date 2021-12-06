@@ -2,11 +2,13 @@ package com.cookandroid.lowest_price_alert.board
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.cookandroid.lowest_price_alert.LoginActivity
 import com.cookandroid.lowest_price_alert.R
@@ -18,17 +20,21 @@ import com.bumptech.glide.Glide
 import com.cookandroid.lowest_price_alert.ChartActivity
 import com.cookandroid.lowest_price_alert.SearchActivity
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.firestore.auth.User
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 
 class PostContentActivity : AppCompatActivity() {
     // variables for board
 
     // firestore
     val firestoredb = FirebaseFirestore.getInstance() // firestore db
+    val firebaseDatabase = FirebaseDatabase.getInstance() // 실시간 데이터 db
+    val storage = Firebase.storage // firebase cloud storage for profile image
     lateinit var boardId : String
     lateinit var postId : String
 
@@ -49,6 +55,10 @@ class PostContentActivity : AppCompatActivity() {
     lateinit var commentContentEt : EditText
     lateinit var commentSubmitBtn : Button
     lateinit var productDetailBtn : Button
+    lateinit var writerUsernameTv : TextView
+    lateinit var writerProfileImageIv : ImageView
+    lateinit var updatedAtTv : TextView
+    lateinit var productPriceTv : TextView
 
     //onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +77,10 @@ class PostContentActivity : AppCompatActivity() {
         commentContentEt = findViewById(R.id.commentContentEt)
         commentSubmitBtn = findViewById(R.id.commentSubmitBtn)
         productDetailBtn = findViewById(R.id.productDetailBtn)
+        writerUsernameTv = findViewById(R.id.writerUsernameTv)
+        writerProfileImageIv = findViewById(R.id.writerProfileImageIv)
+        updatedAtTv = findViewById(R.id.updatedAtTv)
+        productPriceTv = findViewById(R.id.productPriceTv)
 
         // connect list view
         commentLv = findViewById(R.id.commentLv)
@@ -105,13 +119,46 @@ class PostContentActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if(document != null){
+
+                    val sdf = SimpleDateFormat("게시일 : yyyy년 MM월 dd일")
+
                     //Toast.makeText(this, "${document.id} : ${document.data}", Toast.LENGTH_LONG).show()
                     //var postId = document.id
                     Glide.with(this).load("http:"+document["product_image_url"].toString())
                         .into(productImageIv) //이미지 url로 사진 불러오기
+                    writerUsernameTv.text = document["writer_username"].toString()
+                    updatedAtTv.text = sdf.format((document["updated_at"] as com.google.firebase.Timestamp).toDate()).toString()
                     productNameTv.text = document["product_name"].toString()
                     postTitleTv.text = document["title"].toString()
                     postContentTv.text = document["content"].toString()
+
+                    // set profile image from firebase cloud storage
+                    var storageRef = storage.reference
+                    var imagesRef : StorageReference? = storageRef.child(document["writer_profile_image"].toString())
+                    imagesRef?.downloadUrl?.addOnSuccessListener { uri ->
+                        Glide.with(this)
+                            .load(uri)
+                            .into(writerProfileImageIv) //이미지 url로 사진 불러오기
+                    }
+
+                    // get realtime price from realtime database
+                    val path = "product_list/" + document["product_id"].toString() // 실시간 db에 접근하기 위한 경로.
+                    val myRef: DatabaseReference = firebaseDatabase.getReference(path) // 실시간 db에 접근
+
+                    myRef.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val snapshot_info = snapshot.child("price")
+
+                            for (item in snapshot_info.children) {
+                                productPriceTv.text = item.value.toString() + "원"
+                                //Toast.makeText(this@PostActivity,"$product_name 가격정보 : $product_price", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) { // 실시간 db 접근을 실패하면
+                            println("Failed to read value.")
+                        }
+                    })
 
                     // set product detail link button by product id
                     productDetailBtnSetOnClickListener(document["product_id"].toString())

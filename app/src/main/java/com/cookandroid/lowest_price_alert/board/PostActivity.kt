@@ -102,7 +102,7 @@ class PostActivity : AppCompatActivity() {
                         var writer_username = document["writer_username"].toString()
                         var writer_profile_image = document["writer_user_image"].toString()
 
-
+                        // get realtime price from realtime database
                         val path = "product_list/$product_id" // 실시간 db에 접근하기 위한 경로.
                         val myRef: DatabaseReference = firebaseDatabase.getReference(path) // 실시간 db에 접근
 
@@ -111,18 +111,29 @@ class PostActivity : AppCompatActivity() {
                                 val snapshot_info = snapshot.child("price")
 
                                 for (item in snapshot_info.children) {
-                                    product_price = item.value.toString()
+                                    product_price = item.value.toString() + "원"
                                     //Toast.makeText(this@PostActivity,"$product_name 가격정보 : $product_price", Toast.LENGTH_SHORT).show()
                                 }
 
+                                // get comment count from firestore
+                                var commentCount = ""
+                                firestoredb
+                                    .collection("location_board").document(boardId)
+                                    .collection("post").document(postId)
+                                    .collection("comment")
+                                    .get()
+                                    .addOnSuccessListener { comments ->
+                                        commentCount = comments.size().toString()
 
-                                var lb = Post(product_image_url, title, product_name, "한 달 중 최저가", product_price, "", boardId, postId)
-                                postList.add(lb)
+                                        var lb = Post(product_image_url, title, product_name, "한 달 중 최저가", product_price, commentCount, boardId, postId)
+                                        postList.add(lb)
+
+                                        // connect location board list and list view via adapter
+                                        postListAdapter = PostListAdapter(this@PostActivity, postList)
+                                        postListView.adapter = postListAdapter
+                                    }
 
 
-                                // connect location board list and list view via adapter
-                                postListAdapter = PostListAdapter(this@PostActivity, postList)
-                                postListView.adapter = postListAdapter
                             }
 
                             override fun onCancelled(error: DatabaseError) { // 실시간 db 접근을 실패하면
