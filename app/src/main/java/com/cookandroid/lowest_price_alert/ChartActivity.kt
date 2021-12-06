@@ -10,14 +10,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.cookandroid.lowest_price_alert.board.BoardActivity
 import com.github.mikephil.charting.charts.Chart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
@@ -42,6 +40,8 @@ class ChartActivity : AppCompatActivity() {
 //    var now_product_no = "fQIjkqqMKEQQVbrbcM3v"
     lateinit var now_product: String // 현재 물품 하드 코딩
     lateinit var now_product_no: String
+    lateinit var scroll_chart : ScrollView
+    lateinit var bottom_btn : ImageButton
 
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +58,46 @@ class ChartActivity : AppCompatActivity() {
             now_product = intent.getStringExtra("product_no").toString()
             now_product_no = intent.getStringExtra("product_code").toString()
             Log.d(ContentValues.TAG, "no, code 둘다 있음!!!! $now_product $now_product_no")
+        }
+
+        scroll_chart = findViewById(R.id.ScrollView1)
+        bottom_btn = findViewById(R.id.bottom_btn)
+        bottom_btn.setOnClickListener {
+            scroll_chart.scrollTo(0,0)
+        }
+
+        //네비게이션 바
+        lateinit var board_Btn: ImageButton
+        lateinit var home_Btn : ImageButton
+        lateinit var zzim_Btn : ImageButton
+        lateinit var search_Btn : ImageButton
+        lateinit var mypage_Btn: ImageButton
+
+        board_Btn = findViewById(R.id.board_Btn)
+        mypage_Btn = findViewById(R.id.mypage_Btn)
+        home_Btn = findViewById(R.id.home_Btn)
+        zzim_Btn = findViewById(R.id.zzim_Btn)
+        search_Btn = findViewById(R.id.search_Btn)
+
+        board_Btn.setOnClickListener {
+            val intent = Intent(this, BoardActivity::class.java)
+            startActivity(intent)
+        }
+        mypage_Btn.setOnClickListener {
+            val intent = Intent(this, MyPageActivity::class.java)
+            startActivity(intent)
+        }
+        home_Btn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+        zzim_Btn.setOnClickListener {
+            val intent = Intent(this, ZzimActivity::class.java)
+            startActivity(intent)
+        }
+        search_Btn.setOnClickListener {
+            val intent = Intent(this, SearchViewActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -151,11 +191,19 @@ class ChartActivity : AppCompatActivity() {
                 var change_flag = 0
                 val path = "product_list/" + now_product.toString() // 실시간 db에 접근하기 위한 경로. 현재는 하드코딩.
                 val myRef: DatabaseReference = firebaseDatabase.getReference(path) // 실시간 db에 접근
+                var name_substring = ""
+
+                if(name.length > 25){
+                    name_substring = name.substring(0,25)
+                }
+                else{
+                    name_substring = name.toString()
+                }
 
                 var builder = NotificationCompat.Builder(this, CHANNEL_ID) // 푸쉬 알람 기능
-                    .setSmallIcon(R.drawable.bell)
-                    .setContentTitle("notification") // 푸쉬 알람에 띄울 큰 문장
-                    .setContentText("lowest price !!") // 푸쉬 알람에 띄울 작은 문장
+                    .setSmallIcon(R.drawable.brring_icon)
+                    .setContentTitle("BRRING 최저가 알림") // 푸쉬 알람에 띄울 큰 문장
+                    .setContentText(name_substring) // 푸쉬 알람에 띄울 작은 문장
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
                 product_name_textView.text =
@@ -303,6 +351,7 @@ class ChartActivity : AppCompatActivity() {
         lineChart = findViewById(R.id.lineChart)
         lineChart.setDescription("");
         lineChart.getAxisRight().setDrawLabels(false);
+        lineChart.getAxisLeft().setDrawLabels(false);
 
         val entries = ArrayList<Entry>()
         if(chartItem.size < days) {
@@ -318,10 +367,20 @@ class ChartActivity : AppCompatActivity() {
         val depenses = LineDataSet(entries, displayname)
         depenses.axisDependency = YAxis.AxisDependency.LEFT
         depenses.valueTextSize = 12f // 값 폰트 지정하여 크게 보이게 하기
-        depenses.setColor(Color.parseColor("#800000"))
-        depenses.setCircleColor(Color.parseColor("#800000"))
+        depenses.setColor(Color.parseColor("#ff5675"))
+
+        depenses.setDrawCircles(true)
+        depenses.setDrawCircleHole(true)
+        depenses.setCircleColor(Color.parseColor("#ff5675"))
+        depenses.setCircleColorHole(Color.parseColor("#ff5675"))
+        //depenses.setCircleColor(Color.parseColor("#800000"))
         //depenses.setDrawCubic(true); //선 둥글게 만들기
-        //depenses.setDrawFilled(false) //그래프 밑부분 색칠
+        depenses.setDrawFilled(true) //그래프 밑부분 색칠
+        depenses.setLineWidth(3f)
+        depenses.setFillColor(ContextCompat.getColor(this,R.color.pink));
+
+
+
 
         val labels = ArrayList<String>()
         if(chartItem.size < days) {
@@ -346,6 +405,8 @@ class ChartActivity : AppCompatActivity() {
 
         lineChart.data = data
         lineChart.animateXY(1000, 1000);
+        lineChart.getAxisLeft().setDrawGridLines(false);
+        lineChart.getXAxis().setDrawGridLines(false);
         lineChart.invalidate()
     }
 
