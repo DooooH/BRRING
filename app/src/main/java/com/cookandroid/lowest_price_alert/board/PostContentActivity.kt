@@ -67,7 +67,7 @@ class PostContentActivity : AppCompatActivity() {
 
         //auth 객체 초기화, 인스턴스 get
         auth = FirebaseAuth.getInstance()
-        currentUser = auth?.currentUser!!
+        currentUser = auth!!.currentUser!!
 
         // connect view components to variables
         productImageIv = findViewById(R.id.productImageIv)

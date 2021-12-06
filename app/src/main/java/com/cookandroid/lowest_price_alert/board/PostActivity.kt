@@ -125,7 +125,7 @@ class PostActivity : AppCompatActivity() {
                                     .addOnSuccessListener { comments ->
                                         commentCount = comments.size().toString()
 
-                                        var lb = Post(product_image_url, title, product_name, "한 달 중 최저가", product_price, commentCount, boardId, postId)
+                                        var lb = Post(product_image_url, title, product_name, "", product_price, commentCount, boardId, postId)
                                         postList.add(lb)
 
                                         // connect location board list and list view via adapter
