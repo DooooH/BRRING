@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils.centerCrop
+import com.cookandroid.lowest_price_alert.board.BoardActivity
 import com.cookandroid.lowest_price_alert.board.WritePostActivity
 
 class MyPageActivity : AppCompatActivity() {
@@ -47,6 +48,40 @@ class MyPageActivity : AppCompatActivity() {
 
         write_post_Btn.setOnClickListener{
             val intent = Intent(this, WritePostActivity::class.java)
+            startActivity(intent)
+        }
+
+        //네비게이션 바
+        lateinit var board_Btn: ImageButton
+        lateinit var home_Btn : ImageButton
+        lateinit var zzim_Btn : ImageButton
+        lateinit var search_Btn : ImageButton
+        lateinit var mypage_Btn: ImageButton
+
+        board_Btn = findViewById(R.id.board_Btn)
+        mypage_Btn = findViewById(R.id.mypage_Btn)
+        home_Btn = findViewById(R.id.home_Btn)
+        zzim_Btn = findViewById(R.id.zzim_Btn)
+        search_Btn = findViewById(R.id.search_Btn)
+
+        board_Btn.setOnClickListener {
+            val intent = Intent(this, BoardActivity::class.java)
+            startActivity(intent)
+        }
+        mypage_Btn.setOnClickListener {
+            val intent = Intent(this, MyPageActivity::class.java)
+            startActivity(intent)
+        }
+        home_Btn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+        zzim_Btn.setOnClickListener {
+            val intent = Intent(this, ZzimActivity::class.java)
+            startActivity(intent)
+        }
+        search_Btn.setOnClickListener {
+            val intent = Intent(this, SearchViewActivity::class.java)
             startActivity(intent)
         }
 
