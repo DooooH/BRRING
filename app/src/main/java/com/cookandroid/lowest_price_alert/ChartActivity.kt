@@ -2,9 +2,11 @@ package com.cookandroid.lowest_price_alert
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -38,7 +40,7 @@ class ChartActivity : AppCompatActivity() {
     val now_user = "nhUKsEBop5beTg2c4jT4vZtYj842"  // 현재 user 하드 코딩
 //    var now_product = "15253217" // 현재 물품 하드 코딩
 //    var now_product_no = "fQIjkqqMKEQQVbrbcM3v"
-    lateinit var now_product: String // 현재 물품 하드 코딩
+    lateinit var now_product: String
     lateinit var now_product_no: String
     lateinit var scroll_chart : ScrollView
     lateinit var bottom_btn : ImageButton
@@ -199,12 +201,20 @@ class ChartActivity : AppCompatActivity() {
                 else{
                     name_substring = name.toString()
                 }
-
+                val intent = Intent(this, ChartActivity::class.java).apply { // 알림 클릭시 실행할 Activity 지정
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                intent.putExtra("product_code", now_product_no.toString())
+                intent.putExtra("product_no", now_product.toString())
+                val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+                var mLargeIconForNoti = BitmapFactory.decodeResource(getResources(),R.drawable.brring_square)
                 var builder = NotificationCompat.Builder(this, CHANNEL_ID) // 푸쉬 알람 기능
                     .setSmallIcon(R.drawable.brring_icon)
                     .setContentTitle("BRRING 최저가 알림") // 푸쉬 알람에 띄울 큰 문장
                     .setContentText(name_substring) // 푸쉬 알람에 띄울 작은 문장
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setLargeIcon(mLargeIconForNoti)
+                    .setContentIntent(pendingIntent) // 알림 클릭 시 Activity 실행
 
                 product_name_textView.text =
                     name // 제품명 textView에 띄우기
@@ -213,7 +223,7 @@ class ChartActivity : AppCompatActivity() {
                 Glide.with(this).load(imageURL)
                     .into(imageview) //이미지 url로 사진 불러오기
 
-                linkBtn.setOnClickListener {
+                linkBtn.setOnClickListener { // 외부 링크로 연결
                     var url_for_link = "http://prod.danawa.com/info/?pcode=" + now_product
                     var intent = Intent(Intent.ACTION_VIEW, Uri.parse(url_for_link))
                     startActivity(intent)
@@ -232,7 +242,7 @@ class ChartActivity : AppCompatActivity() {
                         for (item in snapshot_info.children) {
                             count_record++;
                             val today_date: String
-                            if (now_date >= 10)
+                            if (now_date >= 10) // 날짜 정보
                                 today_date =
                                     now_year.toString() + "-" + now_month.toString() + "-" + now_date.toString()
                             else
@@ -243,23 +253,6 @@ class ChartActivity : AppCompatActivity() {
 
                             max_cost = Math.max(max_cost, price_info.toInt()) // 최고가 갱신
                             if (min_cost > price_info.toInt()) {
-                                if (change_flag == 1) { // 기존에 들어있던 가격이면 알림 없음
-                                    createNotificationChannel(
-                                        builder,
-                                        notificationId
-                                    ) // 새로 들어온 정보가 최저가이면 알림
-
-                                    firestoredb.collection("user").document(now_user).get()
-                                        .addOnSuccessListener { result ->
-
-                                            val alarm_list = result["alarm_list"] as ArrayList<String>
-                                            alarm_list.add(now_product_no)// 찜 목록에 추가
-
-                                            firestoredb.collection("user").document(now_user)
-                                                .update("alarm_list", alarm_list)
-                                        }
-
-                                }
                                 min_cost =
                                     Math.min(min_cost, price_info.toInt()) // 최저가 갱신
                             }
@@ -296,6 +289,8 @@ class ChartActivity : AppCompatActivity() {
                         LineChartGraph(chartData, "price", 15) // 그래프 그리기
                         change_flag = 1
 
+
+                        // 며칠 간의 가격정보 보여줄지 선택
                         btn7.setOnClickListener {
                             btn7.setBackgroundColor(Color.parseColor("#e9ecef"))
                             btn10.setBackgroundColor(Color.parseColor("#00ff0000"))
@@ -350,15 +345,15 @@ class ChartActivity : AppCompatActivity() {
     private fun LineChartGraph(chartItem: ArrayList<ChartData>, displayname: String, days : Int) { // 날짜 제한이 있을 경우 그래프
         lineChart = findViewById(R.id.lineChart)
         lineChart.setDescription("");
-        lineChart.getAxisRight().setDrawLabels(false);
-        lineChart.getAxisLeft().setDrawLabels(false);
+        lineChart.getAxisRight().setDrawLabels(false) // 우측 기준선 삭제
+        lineChart.getAxisLeft().setDrawLabels(false) // 좌측 기준선 삭제
 
         val entries = ArrayList<Entry>()
-        if(chartItem.size < days) {
+        if(chartItem.size < days) { // 지정 날짜보다 데이터가 적으면 있는 데이터 모두 띄우기
             for (i in chartItem.indices) {
                 entries.add(Entry(chartItem[i].priceData.toFloat(), i)) //  그래프 그리기 위해서 가격 정보 추가
             }
-        } else{
+        } else{ // 지정 날짜보다 데이터가 많으면 해당 날짜 만큼 데이터 띄우기
             for (i: Int in chartItem.size - days.. chartItem.size-1){ //  날짜 제한이 있을 경우
                 entries.add(Entry(chartItem[i].priceData.toFloat(), i - (chartItem.size - days))) //  그래프 그리기 위해서 가격 정보 추가
             }
@@ -376,8 +371,8 @@ class ChartActivity : AppCompatActivity() {
         //depenses.setCircleColor(Color.parseColor("#800000"))
         //depenses.setDrawCubic(true); //선 둥글게 만들기
         depenses.setDrawFilled(true) //그래프 밑부분 색칠
-        depenses.setLineWidth(3f)
-        depenses.setFillColor(ContextCompat.getColor(this,R.color.purple_200));
+        depenses.setLineWidth(3f) // 그래프 선 굵기
+        depenses.setFillColor(ContextCompat.getColor(this,R.color.purple_200)) // 배경색
 
 
 
@@ -405,8 +400,8 @@ class ChartActivity : AppCompatActivity() {
 
         lineChart.data = data
         lineChart.animateXY(1000, 1000);
-        lineChart.getAxisLeft().setDrawGridLines(false);
-        lineChart.getXAxis().setDrawGridLines(false);
+        lineChart.getAxisLeft().setDrawGridLines(false)
+        lineChart.getXAxis().setDrawGridLines(false) // 세로선 삭제
         lineChart.invalidate()
     }
 
