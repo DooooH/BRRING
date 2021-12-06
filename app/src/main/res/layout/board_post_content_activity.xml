@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/back"/>
+    </LinearLayout>
     <ScrollView android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
         android:fillViewport="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -16,34 +25,42 @@
             <ImageView
                 android:id="@+id/productImageIv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
                 android:src="@drawable/ipad"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:padding="10dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical" >
+                    android:orientation="vertical"
+                    android:layout_gravity="center_vertical">
                     <TextView
                         android:id="@+id/productNameTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="아이패드 프로 16형 어쩌구말쓰부스" />
+                        android:text="아이패드 프로 16형 어쩌구말쓰부스"
+                        android:layout_marginBottom="5dp"/>
                     <TextView
                         android:id="@+id/productPriceTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="100원"/>
+                        android:text="100원"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"/>
                 </LinearLayout>
                 <Button
                     android:id="@+id/productDetailBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="상품 보러가기" />
+                    android:text="상품 보러가기"
+                    android:backgroundTint="#7C72D3"
+                    android:background="@drawable/round"
+                    android:textColor="@color/white"/>
             </LinearLayout>
 
 
@@ -51,28 +68,45 @@
             <View
                 android:background="#E6E6E6"
                 android:layout_width="match_parent"
-                android:layout_height="3px" />
+                android:layout_height="3px"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <ImageView
-                    android:id="@+id/writerProfileImageIv"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/write"/>
+                android:orientation="horizontal"
+                android:padding="10dp">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardBackgroundView"
+                    app:cardElevation="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="40dp">
+
+                    <ImageView
+                        android:id="@+id/writerProfileImageIv"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/no_profile"/>
+
+                </androidx.cardview.widget.CardView>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
                     <TextView
                         android:id="@+id/writerUsernameTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="바나나라씨"/>
+                        android:text="바나나라씨"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="5dp"/>
                     <TextView
                         android:id="@+id/updatedAtTv"
                         android:layout_width="wrap_content"
@@ -84,25 +118,59 @@
             <View
                 android:background="#E6E6E6"
                 android:layout_width="match_parent"
-                android:layout_height="3px" />
+                android:layout_height="3px"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"/>
 
             <TextView
                 android:id="@+id/postTitleTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="제목"/>
+                android:text="제목"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="19sp"/>
 
             <TextView
                 android:id="@+id/postContentTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="게시글내용"/>
+                android:text="게시글내용"
+                android:layout_marginBottom="30dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="16sp"/>
 
-            <TextView
+            <View
+                android:background="#E6E6E6"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#DFCDFF"
-                android:text="댓글"/>
+                android:layout_height="3px"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/comment_crop"
+                    android:layout_marginRight="5dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="댓글"/>
+            </LinearLayout>
+            <View
+                android:background="#E6E6E6"
+                android:layout_width="match_parent"
+                android:layout_height="3px"/>
 
             <ListView
                 android:id="@+id/commentLv"
@@ -126,7 +194,10 @@
             android:id="@+id/commentSubmitBtn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="4"
+            android:backgroundTint="#7C72D3"
+            android:background="@drawable/round"
+            android:textColor="@color/white"
             android:text="작성" />
     </LinearLayout>
 </LinearLayout>

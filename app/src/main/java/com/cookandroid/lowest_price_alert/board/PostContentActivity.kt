@@ -67,7 +67,6 @@ class PostContentActivity : AppCompatActivity() {
 
         //auth 객체 초기화, 인스턴스 get
         auth = FirebaseAuth.getInstance()
-        currentUser = auth!!.currentUser!!
 
         // connect view components to variables
         productImageIv = findViewById(R.id.productImageIv)
@@ -186,8 +185,9 @@ class PostContentActivity : AppCompatActivity() {
                         var commentId = document.id
                         var uid = document["uid"].toString()
                         var username = document["username"].toString()
+                        var profile_image = document["profile_image"].toString()
                         var commentContent = document["comment_content"].toString()
-                        var lb = Comment(commentId, uid, username, commentContent)
+                        var lb = Comment(commentId, uid, profile_image, username, commentContent)
                         commentList.add(lb)
                     }
 
@@ -207,7 +207,9 @@ class PostContentActivity : AppCompatActivity() {
     }
 
     fun writeComment() {
-        if(currentUser?.uid.toString() == "null"){
+        currentUser = auth?.currentUser!!
+
+        if(currentUser?.uid.toString() == "null" || currentUser == null){
             Toast.makeText(this, "로그인 후 이용해주세요.", Toast.LENGTH_SHORT).show()
         }
         else if(commentContentEt.text.toString() == ""){
@@ -218,21 +220,28 @@ class PostContentActivity : AppCompatActivity() {
             // get elements
             val commentContent = commentContentEt.text.toString()
             var username = ""
+            var profile_image = ""
             val uid = auth!!.uid.toString()
             firestoredb.collection("user").document(uid)
                 .get()
                 .addOnSuccessListener { document ->
-                    if(document != null && document["username"].toString() != "null"){
-                        username = document["username"].toString()
-                    }
-                    else{
+                    username = if(document != null && document["username"].toString() != "null"){
+                        document["username"].toString()
+                    } else{
                         // unset username -> use anonymous name
-                        username = "익명"
+                        "익명"
                     }
+                    profile_image =
+                        if (document != null && document["profile_image"].toString() != "null") {
+                            document["profile_image"].toString()
+                        } else {
+                            "user-profile/no_profile.png"
+                        }
                     // set post document
                     val comment = hashMapOf(
                         "comment_content" to commentContent,
                         "username" to username,
+                        "profile_image" to profile_image,
                         "uid" to uid
                     )
 
