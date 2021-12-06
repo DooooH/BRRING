@@ -367,17 +367,17 @@ class ChartActivity : AppCompatActivity() {
         val depenses = LineDataSet(entries, displayname)
         depenses.axisDependency = YAxis.AxisDependency.LEFT
         depenses.valueTextSize = 12f // 값 폰트 지정하여 크게 보이게 하기
-        depenses.setColor(Color.parseColor("#ff5675"))
+        depenses.setColor(Color.parseColor("#7C72D3"))
 
         depenses.setDrawCircles(true)
         depenses.setDrawCircleHole(true)
-        depenses.setCircleColor(Color.parseColor("#ff5675"))
-        depenses.setCircleColorHole(Color.parseColor("#ff5675"))
+        depenses.setCircleColor(Color.parseColor("#7C72D3"))
+        depenses.setCircleColorHole(Color.parseColor("#7C72D3"))
         //depenses.setCircleColor(Color.parseColor("#800000"))
         //depenses.setDrawCubic(true); //선 둥글게 만들기
         depenses.setDrawFilled(true) //그래프 밑부분 색칠
         depenses.setLineWidth(3f)
-        depenses.setFillColor(ContextCompat.getColor(this,R.color.pink));
+        depenses.setFillColor(ContextCompat.getColor(this,R.color.purple_200));
 
 
 
