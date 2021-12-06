@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var alarm_Btn: ImageButton
     lateinit var scroll_main : ScrollView
     lateinit var bottom_btn : ImageButton
+    var now_user = "nhUKsEBop5beTg2c4jT4vZtYj842"
 
     // declare nullable object for Firebase auth
     private var auth: FirebaseAuth? = null
@@ -33,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         loginBtn = findViewById(R.id.login_Btn)
         searchBtn = findViewById(R.id.search_txt)
@@ -95,7 +95,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
+        val intent = Intent(applicationContext, MyService::class.java)
+        intent.putExtra("user_id", now_user)
+        startService(intent)
         /*
         // keyboard option action
         searchItem.setOnEditorActionListener{ textView, action, event ->
@@ -155,7 +157,7 @@ class MainActivity : AppCompatActivity() {
 
         var search_product_List = arrayListOf<search_Product>()
         firestoredb.collection("product_list").get().addOnSuccessListener { product ->
-            firestoredb.collection("user").document("nhUKsEBop5beTg2c4jT4vZtYj842").get()
+            firestoredb.collection("user").document(now_user).get()
                 .addOnSuccessListener { result ->
                     val search_list = result["search_list"] as ArrayList<String>
                     if (search_list.size == 0) {
