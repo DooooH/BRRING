@@ -15,7 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 class ZzimActivity : AppCompatActivity() {
 
 
-
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.zzim_activity)
@@ -38,19 +37,18 @@ class ZzimActivity : AppCompatActivity() {
                     .addOnSuccessListener { product ->
 
                         zzim_title_text.text = "찜한 상품 (" + wish_list.size.toString() + ")"
+                        for (i: Int in wish_list.size - 1 downTo 0) {
+                            for (document in product) {
+                                val item = Product(
+                                    document["name"] as String,
+                                    document["image_url"] as String,
+                                    "sub1",
+                                    "sub2",
+                                    document["no"] as String,
+                                    document.id as String
+                                )
+                                val p_no = document["no"].toString()
 
-                        for (document in product) {
-                            val item = Product(
-                                document["name"] as String,
-                                document["image_url"] as String,
-                                "sub1",
-                                "sub2",
-                                document["no"] as String,
-                                document.id as String
-                            )
-                            val p_no = document["no"].toString()
-
-                            for (i: Int in 0..wish_list.size - 1) {
                                 if (wish_list[i].equals(p_no)) {
                                     productList.add(item)
                                     str += item.photo.toString() + "\n"
@@ -83,7 +81,7 @@ class ZzimActivity : AppCompatActivity() {
             swipe.isRefreshing = false
         }
 
-        back_btn.setOnClickListener{
+        back_btn.setOnClickListener {
             onBackPressed()
         }
 
@@ -94,18 +92,18 @@ class ZzimActivity : AppCompatActivity() {
 
                     zzim_title_text.text = "찜한 상품 (" + wish_list.size.toString() + ")"
 
-                    for (document in product) {
-                        val item = Product(
-                            document["name"] as String,
-                            document["image_url"] as String,
-                            "sub1",
-                            "sub2",
-                            document["no"] as String,
-                            document.id as String
-                        )
-                        val p_no = document["no"].toString()
+                    for (i: Int in wish_list.size - 1 downTo 0) {
+                        for (document in product) {
+                            val item = Product(
+                                document["name"] as String,
+                                document["image_url"] as String,
+                                "sub1",
+                                "sub2",
+                                document["no"] as String,
+                                document.id as String
+                            )
+                            val p_no = document["no"].toString()
 
-                        for (i: Int in 0..wish_list.size - 1) {
                             if (wish_list[i].equals(p_no)) {
                                 productList.add(item)
                                 str += item.photo.toString() + "\n"
