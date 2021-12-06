@@ -25,6 +25,11 @@ class MyPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mypage_activity)
 
+        var back_btn = findViewById<ImageButton>(R.id.back_button) // 뒤로가기
+        back_btn.setOnClickListener{
+            onBackPressed()
+        }
+
         var userImage = findViewById<ImageView>(R.id.userImage)
         Glide.with(this).load(R.drawable.junha).circleCrop().into(userImage)
 
