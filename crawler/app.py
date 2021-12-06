@@ -6,6 +6,7 @@ import lxml
 import cchardet
 from datetime import datetime
 from flask import Flask, jsonify, request
+from flask_caching import Cache
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, parse_qsl
@@ -93,8 +94,6 @@ def parse_search(url):
             item = prod_info_list[i]
             temp = {}
 
-            if i == 0:
-                print(item.prettify())
             # 상품 코드
             # thumb = item.find('div', class_='thumb_image')
             # prod_link = thumb.find('a')
@@ -150,12 +149,18 @@ def parse_search(url):
             data['contents'].append(temp)
 
     print("processing time :", time.time() - start)  # 현재시각 - 시작시간 = 실행 시간
-    print(data)
-    print(len(data['contents']))
-    print(data['contents'])
+    # print(data)
     return data
 
+config = {
+    "DEBUG": True,          # some Flask specific configs
+    "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
+    "CACHE_DEFAULT_TIMEOUT": 300
+}
 app = Flask(__name__)
+# tell Flask to use the above defined config
+app.config.from_mapping(config)
+cache = Cache(app)
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}
@@ -170,6 +175,7 @@ prod_ref = fs.collection(u'product_list') # firestore
 url_ref = fs.collection(u'url_list') # firestore
 
 @app.route('/search') #get search result
+@cache.cached(timeout=600, query_string=True) # cache
 def get_search():
     param_dict = request.args.to_dict()
     if len(param_dict) == 0:
@@ -194,11 +200,6 @@ def get_product():
         url_list = ['http://prod.danawa.com/info/?pcode=' + pcode]
         new_crawl(url_list, headers, cur_time, pcode)
 
-    # data = {'contents': [
-    #     {
-    #         u'result': 'Success'
-    #     }
-    # ]}
     return 'Success'
 
 @app.route('/')
