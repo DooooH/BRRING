@@ -2,6 +2,7 @@ package com.cookandroid.lowest_price_alert
 
 import android.content.Context
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,12 +19,13 @@ import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
     // variables for product test
-    lateinit var boardBtn: Button
+
     lateinit var loginBtn: ImageButton
     lateinit var searchBtn: Button
-    lateinit var mypageBtn: Button
     lateinit var recom_text: TextView
     lateinit var alarm_Btn: ImageButton
+    lateinit var scroll_main : ScrollView
+    lateinit var bottom_btn : ImageButton
 
     // declare nullable object for Firebase auth
     private var auth: FirebaseAuth? = null
@@ -32,17 +34,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        boardBtn = findViewById(R.id.boardBtn)
+
         loginBtn = findViewById(R.id.login_Btn)
         searchBtn = findViewById(R.id.search_txt)
-        mypageBtn = findViewById(R.id.mypage_btn)
         recom_text = findViewById(R.id.recom_text)
         alarm_Btn = findViewById(R.id.alarm_btn)
+        bottom_btn = findViewById(R.id.bottom_btn)
 
-        boardBtn.setOnClickListener {
-            val intent = Intent(this, BoardActivity::class.java)
-            startActivity(intent)
-        }
+        scroll_main = findViewById(R.id.scroll_main)
+
         loginBtn.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -51,14 +51,50 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SearchViewActivity::class.java)
             startActivity(intent)
         }
-        mypageBtn.setOnClickListener {
-            val intent = Intent(this, MyPageActivity::class.java)
-            startActivity(intent)
-        }
         alarm_Btn.setOnClickListener {
             val intent = Intent(this, RecentAlarmActivity::class.java)
             startActivity(intent)
         }
+        bottom_btn.setOnClickListener {
+            scroll_main.scrollTo(0,0)
+        }
+
+
+        //네비게이션 바
+        lateinit var board_Btn: ImageButton
+        lateinit var home_Btn : ImageButton
+        lateinit var zzim_Btn : ImageButton
+        lateinit var search_Btn : ImageButton
+        lateinit var mypage_Btn: ImageButton
+
+        board_Btn = findViewById(R.id.board_Btn)
+        mypage_Btn = findViewById(R.id.mypage_Btn)
+        home_Btn = findViewById(R.id.home_Btn)
+        zzim_Btn = findViewById(R.id.zzim_Btn)
+        search_Btn = findViewById(R.id.search_Btn)
+
+        board_Btn.setOnClickListener {
+            val intent = Intent(this, BoardActivity::class.java)
+            startActivity(intent)
+        }
+        mypage_Btn.setOnClickListener {
+            val intent = Intent(this, MyPageActivity::class.java)
+            startActivity(intent)
+        }
+        home_Btn.setOnClickListener {
+            scroll_main.scrollTo(0,0)
+            //val intent = Intent(this, MainActivity::class.java)
+            //startActivity(intent)
+        }
+        zzim_Btn.setOnClickListener {
+            val intent = Intent(this, ZzimActivity::class.java)
+            startActivity(intent)
+        }
+        search_Btn.setOnClickListener {
+            val intent = Intent(this, SearchViewActivity::class.java)
+            startActivity(intent)
+        }
+
 
         /*
         // keyboard option action
