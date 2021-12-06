@@ -41,7 +41,7 @@ class RecentAlarmActivity : AppCompatActivity() {
                             alarm_list[i] = alarm_list[i].replace(" ", "")
 
                         }
-                        for (i: Int in 0..alarm_list.size - 1) {
+                        for (i: Int in alarm_list.size - 1 downTo 0) {
                             for (document in product) {
 
                                 val item = Alarm(
@@ -98,7 +98,7 @@ class RecentAlarmActivity : AppCompatActivity() {
                         alarm_list[i] = alarm_list[i].replace(" ", "")
 
                     }
-                    for (i: Int in 0..alarm_list.size - 1) {
+                    for (i: Int in alarm_list.size - 1 downTo 0) {
                         for (document in product) {
 
                             val item = Alarm(
