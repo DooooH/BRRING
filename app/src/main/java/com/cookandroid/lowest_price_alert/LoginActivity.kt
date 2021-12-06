@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -53,6 +54,10 @@ class LoginActivity : AppCompatActivity() {
 
         google_sign_in_button.setOnClickListener {
             googleLogin()
+        }
+        var back_btn = findViewById<ImageButton>(R.id.back_button) // 뒤로가기
+        back_btn.setOnClickListener{
+            onBackPressed()
         }
 
         // Configure Google Sign In
