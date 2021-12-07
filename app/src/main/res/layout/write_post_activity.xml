@@ -2,56 +2,107 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/titleEt"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:hint="글 제목" />
-    <EditText
-        android:id="@+id/contentEt"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:hint="글 내용"/>
-    <EditText
-        android:id="@+id/selectedProductTv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:text="선택상품 없음" />
-    <EditText
-        android:id="@+id/selectedProductImgPathEt"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:text="" />
-    <EditText
-        android:id="@+id/selectedProductPriceEt"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:text="" />
-    <EditText
-        android:id="@+id/selectedProductIdEt"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:text="" />
+        android:layout_height="60dp"
+        android:background="@drawable/search_area"
+        android:backgroundTint="#7C72D3"
+        android:layout_marginBottom="10dp">
 
-    <Button
-        android:id="@+id/selectProductBtn"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="글쓰기"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/backBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="left"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/back"
+            app:backgroundTint="@color/white" />
+    </FrameLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:text="공구 할 상품 선택" />
-    <Button
-        android:id="@+id/writeBtn"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:text="글 작성" />
+        android:orientation="vertical"
+        android:padding="10dp">
+        <EditText
+            android:id="@+id/titleEt"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/round"
+            android:backgroundTint="#ECECEC"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:hint="글 제목" />
+        <EditText
+            android:id="@+id/contentEt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/round"
+            android:backgroundTint="#ECECEC"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:hint="글 내용"/>
+        <EditText
+            android:id="@+id/selectedProductTv"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/round"
+            android:backgroundTint="#ECECEC"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:hint="선택상품 없음" />
+        <EditText
+            android:id="@+id/selectedProductImgPathEt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:text="" />
+        <EditText
+            android:id="@+id/selectedProductPriceEt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:text="" />
+        <EditText
+            android:id="@+id/selectedProductIdEt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:text="" />
+
+        <Button
+            android:id="@+id/selectProductBtn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/round"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#7C72D3"
+            app:cardElevation="0dp"
+            android:text="공구 할 상품 선택" />
+        <Button
+            android:id="@+id/writeBtn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/round"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#7C72D3"
+            app:cardElevation="0dp"
+            android:text="글 작성" />
+    </LinearLayout>
+
 
 </LinearLayout>
