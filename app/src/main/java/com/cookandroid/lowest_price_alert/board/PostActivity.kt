@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.cookandroid.lowest_price_alert.LoginActivity
+import com.cookandroid.lowest_price_alert.*
 import com.cookandroid.lowest_price_alert.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -42,6 +42,48 @@ class PostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_post_activity)
+
+        //네비게이션 바
+        lateinit var board_Btn: ImageButton
+        lateinit var home_Btn : ImageButton
+        lateinit var zzim_Btn : ImageButton
+        lateinit var search_Btn : ImageButton
+        lateinit var mypage_Btn: ImageButton
+
+        board_Btn = findViewById(R.id.board_Btn)
+        mypage_Btn = findViewById(R.id.mypage_Btn)
+        home_Btn = findViewById(R.id.home_Btn)
+        zzim_Btn = findViewById(R.id.zzim_Btn)
+        search_Btn = findViewById(R.id.search_Btn)
+
+        board_Btn.setOnClickListener {
+            val intent = Intent(this, BoardActivity::class.java)
+            startActivity(intent)
+        }
+        mypage_Btn.setOnClickListener {
+            val intent = Intent(this, MyPageActivity::class.java)
+            startActivity(intent)
+        }
+        home_Btn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+        zzim_Btn.setOnClickListener {
+            val intent = Intent(this, ZzimActivity::class.java)
+            startActivity(intent)
+        }
+        search_Btn.setOnClickListener {
+            val intent = Intent(this, SearchViewActivity::class.java)
+            startActivity(intent)
+        }
+
+        var back_btn = findViewById<ImageButton>(R.id.back_button) // 뒤로가기
+        back_btn.setOnClickListener{
+            onBackPressed()
+        }
+
+
+
 
         //auth 객체 초기화, 인스턴스 get
         auth = FirebaseAuth.getInstance()
@@ -105,7 +147,7 @@ class PostActivity : AppCompatActivity() {
                         // get realtime price from realtime database
                         val path = "product_list/$product_id" // 실시간 db에 접근하기 위한 경로.
                         val myRef: DatabaseReference = firebaseDatabase.getReference(path) // 실시간 db에 접근
-
+                        postList.clear()
                         myRef.addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 val snapshot_info = snapshot.child("price")
