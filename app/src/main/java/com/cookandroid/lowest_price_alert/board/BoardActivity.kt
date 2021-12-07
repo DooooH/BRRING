@@ -1,9 +1,10 @@
 package com.cookandroid.lowest_price_alert.board
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
-import com.cookandroid.lowest_price_alert.R
+import com.cookandroid.lowest_price_alert.*
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BoardActivity : AppCompatActivity() {
@@ -21,6 +22,50 @@ class BoardActivity : AppCompatActivity() {
 
         // connect list view
         var boardListView = findViewById<ListView>(R.id.boardListView)
+
+
+
+        //네비게이션 바
+        lateinit var board_Btn: ImageButton
+        lateinit var home_Btn : ImageButton
+        lateinit var zzim_Btn : ImageButton
+        lateinit var search_Btn : ImageButton
+        lateinit var mypage_Btn: ImageButton
+
+        board_Btn = findViewById(R.id.board_Btn)
+        mypage_Btn = findViewById(R.id.mypage_Btn)
+        home_Btn = findViewById(R.id.home_Btn)
+        zzim_Btn = findViewById(R.id.zzim_Btn)
+        search_Btn = findViewById(R.id.search_Btn)
+
+        board_Btn.setOnClickListener {
+            val intent = Intent(this, BoardActivity::class.java)
+            startActivity(intent)
+        }
+        mypage_Btn.setOnClickListener {
+            val intent = Intent(this, MyPageActivity::class.java)
+            startActivity(intent)
+        }
+        home_Btn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+        zzim_Btn.setOnClickListener {
+            val intent = Intent(this, ZzimActivity::class.java)
+            startActivity(intent)
+        }
+        search_Btn.setOnClickListener {
+            val intent = Intent(this, SearchViewActivity::class.java)
+            startActivity(intent)
+        }
+
+        var back_btn = findViewById<ImageButton>(R.id.back_button) // 뒤로가기
+        back_btn.setOnClickListener{
+            onBackPressed()
+        }
+
+
+
 
         // get location boards from firestore
         firestoredb.collection("location_board")
