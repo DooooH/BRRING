@@ -38,7 +38,7 @@ class BoardListAdapter (val context: Context, val boardList: ArrayList<Board>) :
         boardId.text = Board.boardId
 
         view.setOnClickListener {
-            Toast.makeText(this.context, boardId.text, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this.context, boardId.text, Toast.LENGTH_SHORT).show()
             val intent = Intent(this.context, PostActivity::class.java)
             intent.putExtra("boardId", boardId.text)
             startActivity(this.context, intent, null)
