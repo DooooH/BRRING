@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -13,14 +14,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="공동구매 게시판"
-            android:textSize="17sp"
-            android:textStyle="bold"
             android:textColor="@color/white"
-            android:layout_gravity="center"/>
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/backBtn"
+        <ImageButton
+            android:id="@+id/back_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="left"
@@ -34,9 +35,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
+        android:layout_marginBottom="60dp"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-    </ListView>
+        android:paddingRight="20dp"></ListView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/writeBtn"
@@ -45,10 +46,77 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="80dp"
+        android:backgroundTint="#746DB3"
         android:clickable="true"
         android:contentDescription="write post"
-        android:backgroundTint="#746DB3"
-        android:src="@drawable/write"/>
+        android:src="@drawable/write" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/navigation_bar_boorder">
+
+        <ImageButton
+            android:id="@+id/search_Btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:tint="@color/brring_purple"
+            android:adjustViewBounds="true"
+            android:background="#00ff0000"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:src="@drawable/search"
+            />
+
+        <ImageButton
+            android:id="@+id/board_Btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:tint="@color/brring_purple"
+            android:background="#00ff0000"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:src="@drawable/document"
+            />
+
+        <ImageButton
+            android:id="@+id/home_Btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:tint="@color/brring_purple"
+            android:background="#00ff0000"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:src="@drawable/main" />
+
+        <ImageButton
+            android:id="@+id/zzim_Btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:tint="@color/brring_purple"
+            android:background="#00ff0000"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:src="@drawable/heart"
+
+            />
+
+        <ImageButton
+            android:id="@+id/mypage_Btn"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+
+            app:tint="@color/brring_purple"
+            android:background="#00ff0000"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:src="@drawable/mypage"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>
