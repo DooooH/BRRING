@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.cookandroid.lowest_price_alert.MainActivity
 import com.cookandroid.lowest_price_alert.R
 import org.w3c.dom.Text
+import java.text.DecimalFormat
 
 class WishListAdapter (val context: Context, val wishList: ArrayList<Wish>) : BaseAdapter() {
     override fun getCount(): Int {
@@ -49,7 +50,10 @@ class WishListAdapter (val context: Context, val wishList: ArrayList<Wish>) : Ba
         itemId.text = wish.itemId
         itemName.text = wish.itemName
         //option.text = wish.option
-        itemPrice.text = wish.itemPrice
+
+        val t_dec_down = DecimalFormat("#,###")
+        var temp = t_dec_down.format(wish.itemPrice.toInt())
+        itemPrice.text = temp + "원"
 
         return view
     }
