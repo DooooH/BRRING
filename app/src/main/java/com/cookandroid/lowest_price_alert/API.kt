@@ -23,28 +23,11 @@ interface API {
         @Query("no") query: String
     ): Call<String>
 
-//    @FormUrlEncoded
-//    @POST("v1/papago/n2mt")
-//    fun transferPapago(
-//        @Field("source") source: String,
-//        @Field("target") target: String,
-//        @Field("text") text: String
-//    ): Call<ResultTransferPapago>
-
     companion object {
         // base API url
         private const val BASE_URL_REST_API = "http://15.165.67.32:5000"
 
         fun create(): API {
-//            val httpLoggingInterceptor = HttpLoggingInterceptor()
-//            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-
-//            val headerInterceptor = Interceptor {
-//                val request = it.request()
-//                    .newBuilder()
-//                    .build()
-//                return@Interceptor it.proceed(request)
-//            }
             var gson = GsonBuilder().setLenient().create()
 
             val client = OkHttpClient.Builder()

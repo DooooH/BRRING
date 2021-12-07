@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +26,7 @@ class SearchActivity : AppCompatActivity() {
     lateinit var result_price : TextView
     lateinit var inputItem : String
     lateinit var item : List<Items>
-    lateinit var gridView : GridView
+    lateinit var gridView : ExpandableHeightGridView
     lateinit var searchBtn : Button
     lateinit var backBtn : Button
     lateinit var searchText : EditText
@@ -83,10 +84,11 @@ class SearchActivity : AppCompatActivity() {
 
         searchBtn = findViewById<Button>(R.id.searchBtn)
         backBtn = findViewById<Button>(R.id.backBtn)
+        searchText = findViewById<EditText>(R.id.search_txt)
+
 
 
         searchBtn.setOnClickListener(){
-            searchText = findViewById<EditText>(R.id.search_txt)
             val intent = Intent(this, SearchActivity::class.java)
             intent.putExtra("item", searchText.text.toString())
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -100,6 +102,7 @@ class SearchActivity : AppCompatActivity() {
 
         val api = API.create()
 
+        searchText.text = intent.getStringExtra("item").toString().toEditable()
         inputItem = intent.getStringExtra("item").toString()
         gridView = findViewById(R.id.gridView)
 
@@ -186,4 +189,6 @@ class SearchActivity : AppCompatActivity() {
         list.add(element)
         return list.toTypedArray()
     }
+
+    fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 }
