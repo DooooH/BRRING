@@ -63,6 +63,13 @@ class WritePostActivity : AppCompatActivity() {
         selectedProductImgPathEt = findViewById(R.id.selectedProductImgPathEt)
         selectedProductPriceEt = findViewById(R.id.selectedProductPriceEt)
 
+
+        var back_btn = findViewById<ImageButton>(R.id.back_button) // 뒤로가기
+        back_btn.setOnClickListener{
+            onBackPressed()
+        }
+
+
         // get boardId
         boardId = intent.getStringExtra("boardId").toString()
 
