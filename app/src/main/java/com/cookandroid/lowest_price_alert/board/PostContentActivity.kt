@@ -10,15 +10,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import com.cookandroid.lowest_price_alert.LoginActivity
-import com.cookandroid.lowest_price_alert.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.w3c.dom.Text
 import java.sql.Timestamp
 import com.bumptech.glide.Glide
-import com.cookandroid.lowest_price_alert.ChartActivity
-import com.cookandroid.lowest_price_alert.SearchActivity
+import com.cookandroid.lowest_price_alert.*
+import com.cookandroid.lowest_price_alert.R
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.firestore.auth.User
@@ -64,6 +62,45 @@ class PostContentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_post_content_activity)
+
+        //네비게이션 바
+        lateinit var board_Btn: ImageButton
+        lateinit var home_Btn : ImageButton
+        lateinit var zzim_Btn : ImageButton
+        lateinit var search_Btn : ImageButton
+        lateinit var mypage_Btn: ImageButton
+
+        board_Btn = findViewById(R.id.board_Btn)
+        mypage_Btn = findViewById(R.id.mypage_Btn)
+        home_Btn = findViewById(R.id.home_Btn)
+        zzim_Btn = findViewById(R.id.zzim_Btn)
+        search_Btn = findViewById(R.id.search_Btn)
+
+        board_Btn.setOnClickListener {
+            val intent = Intent(this, BoardActivity::class.java)
+            startActivity(intent)
+        }
+        mypage_Btn.setOnClickListener {
+            val intent = Intent(this, MyPageActivity::class.java)
+            startActivity(intent)
+        }
+        home_Btn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+        zzim_Btn.setOnClickListener {
+            val intent = Intent(this, ZzimActivity::class.java)
+            startActivity(intent)
+        }
+        search_Btn.setOnClickListener {
+            val intent = Intent(this, SearchViewActivity::class.java)
+            startActivity(intent)
+        }
+
+        var back_btn = findViewById<ImageButton>(R.id.back_button) // 뒤로가기
+        back_btn.setOnClickListener{
+            onBackPressed()
+        }
 
         //auth 객체 초기화, 인스턴스 get
         auth = FirebaseAuth.getInstance()
