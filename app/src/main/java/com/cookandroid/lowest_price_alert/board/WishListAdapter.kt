@@ -48,7 +48,7 @@ class WishListAdapter (val context: Context, val wishList: ArrayList<Wish>) : Ba
         wishId.text = wish.wishId
         itemId.text = wish.itemId
         itemName.text = wish.itemName
-        option.text = wish.option
+        //option.text = wish.option
         itemPrice.text = wish.itemPrice
 
         return view
