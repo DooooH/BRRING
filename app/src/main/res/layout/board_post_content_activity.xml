@@ -6,14 +6,21 @@
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/back"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="right"
+            android:layout_marginLeft="15dp"
+            android:background="#00ff0000"
+            android:src="@drawable/back_crop" />
     </LinearLayout>
     <ScrollView android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:fillViewport="true">
@@ -56,11 +63,13 @@
                     android:id="@+id/productDetailBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="2"
                     android:text="상품 보러가기"
                     android:backgroundTint="#7C72D3"
                     android:background="@drawable/round"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/brring_purple"/>
             </LinearLayout>
 
 
@@ -180,7 +189,9 @@
     </ScrollView>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal">
         <EditText
             android:id="@+id/commentContentEt"
@@ -188,16 +199,88 @@
             android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:hint="댓글 내용"/>
+            android:hint="  댓글 내용"/>
         <Button
             android:id="@+id/commentSubmitBtn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="35dp"
             android:layout_weight="4"
+            android:layout_gravity="center"
             android:backgroundTint="#7C72D3"
             android:background="@drawable/round"
-            android:textColor="@color/white"
+            android:textColor="@color/brring_purple"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:text="작성" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/navigation_bar_boorder">
+
+        <ImageButton
+            android:id="@+id/search_Btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:tint="@color/brring_purple"
+            android:adjustViewBounds="true"
+            android:background="#00ff0000"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:src="@drawable/search"
+            />
+
+        <ImageButton
+            android:id="@+id/board_Btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:tint="@color/brring_purple"
+            android:background="#00ff0000"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:src="@drawable/document"
+            />
+
+        <ImageButton
+            android:id="@+id/home_Btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:tint="@color/brring_purple"
+            android:background="#00ff0000"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:src="@drawable/main" />
+
+        <ImageButton
+            android:id="@+id/zzim_Btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:tint="@color/brring_purple"
+            android:background="#00ff0000"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:src="@drawable/heart"
+
+            />
+
+        <ImageButton
+            android:id="@+id/mypage_Btn"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+
+            app:tint="@color/brring_purple"
+            android:background="#00ff0000"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:src="@drawable/mypage"
+            />
+
     </LinearLayout>
 </LinearLayout>
