@@ -103,21 +103,16 @@ def recommend_crawl_update(headers, cur_time):
     html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
     driver.close()
-    # print(soup.prettify())
     total = soup.find('div', class_='main-pick cmPick-swiper')
 
     a_list = soup.find_all('a', class_='prod-list__link')
-
-    # print(total.prettify())
 
     url_list = []
 
     for a in a_list:
         href = a.attrs['href']
         queries = dict(parse_qsl(urlparse(href).query))
-        # print(href)
         if "pcode" in queries:
-            # print(queries["pcode"])
             url_list.append(href)
 
     crawl_update(url_list, headers, cur_time)
