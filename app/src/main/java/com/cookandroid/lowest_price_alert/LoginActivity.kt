@@ -71,7 +71,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth?.currentUser
         //Toast.makeText(this, "사용자 로그인정보 있음", Toast.LENGTH_SHORT).show()
         //updateUI(currentUser)
     }

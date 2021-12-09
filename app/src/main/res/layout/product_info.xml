@@ -161,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="#00ff0000"
                     android:background="#00ff0000"
-                    android:text="7일"
+                    android:text="5일"
                     android:textColor="#808080"/>
                 <Button
                     android:id="@+id/btn10"
@@ -170,7 +170,7 @@
                     android:backgroundTint="#00ff0000"
                     android:background="#00ff0000"
                     android:layout_marginLeft="10dp"
-                    android:text="10일"
+                    android:text="7일"
                     android:textColor="#808080"/>
                 <Button
                     android:id="@+id/btn15"
@@ -179,7 +179,7 @@
                     android:backgroundTint="#00ff0000"
                     android:background="#00ff0000"
                     android:layout_marginLeft="10dp"
-                    android:text="15일"
+                    android:text="10일"
                     android:textColor="#808080"/>
 
 

@@ -295,20 +295,20 @@ class ChartActivity : AppCompatActivity() {
                             btn7.setBackgroundColor(Color.parseColor("#e9ecef"))
                             btn10.setBackgroundColor(Color.parseColor("#00ff0000"))
                             btn15.setBackgroundColor(Color.parseColor("#00ff0000"))
-                            LineChartGraph(chartData, "price",7)
+                            LineChartGraph(chartData, "price",5)
                         }
                         btn10.setOnClickListener {
                             btn7.setBackgroundColor(Color.parseColor("#00ff0000"))
                             btn10.setBackgroundColor(Color.parseColor("#e9ecef"))
                             btn15.setBackgroundColor(Color.parseColor("#00ff0000"))
-                            LineChartGraph(chartData, "price",10)
+                            LineChartGraph(chartData, "price",7)
                         }
 
                         btn15.setOnClickListener {
                             btn7.setBackgroundColor(Color.parseColor("#00ff0000"))
                             btn10.setBackgroundColor(Color.parseColor("#00ff0000"))
                             btn15.setBackgroundColor(Color.parseColor("#e9ecef"))
-                            LineChartGraph(chartData, "price",15)
+                            LineChartGraph(chartData, "price",10)
                         }
 
                     }
