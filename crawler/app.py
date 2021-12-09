@@ -175,7 +175,7 @@ prod_ref = fs.collection(u'product_list') # firestore
 url_ref = fs.collection(u'url_list') # firestore
 
 @app.route('/search') #get search result
-@cache.cached(timeout=600, query_string=True) # cache
+@cache.cached(timeout=12 * 3600, query_string=True) # cache 12시간
 def get_search():
     param_dict = request.args.to_dict()
     if len(param_dict) == 0:
