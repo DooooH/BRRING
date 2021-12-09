@@ -26,7 +26,7 @@ class SearchActivity : AppCompatActivity() {
     lateinit var result_price : TextView
     lateinit var inputItem : String
     lateinit var item : List<Items>
-    lateinit var gridView : ExpandableHeightGridView
+    lateinit var gridView : GridView
     lateinit var searchBtn : Button
     lateinit var backBtn : Button
     lateinit var searchText : EditText
@@ -114,7 +114,7 @@ class SearchActivity : AppCompatActivity() {
             ) {
                 // 받아온 JSON을 data로 parsing
                 item = response.body()!!.component1()
-
+                var count = 0
                 for (i in 0 until item.size) {
                     val c = item[i]
                     val img = c.component1()
@@ -133,9 +133,11 @@ class SearchActivity : AppCompatActivity() {
                     prices = append(prices, price)
                     specs = append(specs, spec)
                     nos = append(nos, no)
+                    count = count+1
 
                     // 받아온 요소들로 layout 동적으로 만들기
                 }
+                Log.d(TAG, "개수 : ${count}")
                 val mainAdapter = SearchAdapter(this@SearchActivity, imgs, names, prices, specs)
                 gridView.adapter = mainAdapter
             }
