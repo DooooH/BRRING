@@ -74,7 +74,7 @@ class SearchViewActivity : AppCompatActivity() {
 
             firestoredb.collection("user").document(now_user).get().addOnSuccessListener { result ->
                 val search_history = result["search_history"] as ArrayList<String>
-                search_history.add(searchText.text.toString())
+                search_history.add(0,searchText.text.toString())
                 var res = searchText.text.toString()
 
                 firestoredb.collection("user").document(now_user)
