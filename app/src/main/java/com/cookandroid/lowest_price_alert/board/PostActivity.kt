@@ -128,7 +128,7 @@ class PostActivity : AppCompatActivity() {
     }
 
     fun getPosts(){
-        firestoredb.collection("location_board").document(boardId).collection("post")
+        firestoredb.collection("location_board").document(boardId).collection("post").orderBy("created_at")
             .get()
             .addOnSuccessListener { documents ->
                 if(documents != null){
