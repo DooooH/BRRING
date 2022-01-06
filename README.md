@@ -32,7 +32,7 @@
 > 2. Main 화면: 추천 상품 및 최근 검색 상품 등에 대한 전반적인 정보를 받아볼 수 있다.
 
 >&nbsp;&nbsp;&nbsp;![search_1](https://user-images.githubusercontent.com/51983113/148375928-457ab17a-639b-4949-bf9e-a4d6164e64f6.png)
->&nbsp;&nbsp;&nbsp;![search_1](https://user-images.githubusercontent.com/51983113/148375928-457ab17a-639b-4949-bf9e-a4d6164e64f6.png)
+>&nbsp;&nbsp;&nbsp;![search_2](https://user-images.githubusercontent.com/51983113/148378411-f44dbf30-d26c-453f-95a2-7b25b4c542f9.png)
 
 > 1. 검색창: 검색창을 눌러 검색을 할 수 있다.
 > 2. 검색 결과: 검색어에 대한 결과를 확인할 수 있다.
